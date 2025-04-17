@@ -1,0 +1,20 @@
+//!
+//! Notespace-Editor
+//!
+//! Iced application messages.
+//!
+
+use std::path::PathBuf;
+use std::sync::Arc;
+use iced::widget::text_editor;
+use crate::app_io::AppIOError;
+
+#[derive(Debug, Clone)]
+pub enum AppMessage {
+    TextEdited(text_editor::Action),
+    OpenFileFromDialog,
+    FileOpened(Result<(PathBuf, Arc<String>), AppIOError>),
+    NewFile,
+    SaveFile,
+    FileSaved(Result<PathBuf, AppIOError>),
+}
