@@ -3,6 +3,9 @@
 //!
 //! Style/Appearance related components.
 //!
+//! References:
+//! - https://github.com/iced-rs/iced/discussions/1266
+//!
 
 use iced::widget::container;
 use iced::{border, Border, Color, Theme};
