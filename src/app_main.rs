@@ -129,8 +129,12 @@ impl AppMain {
                 rust_i18n::set_locale(str.as_ref());
                 Task::none()
             },
-            AppMessage::UpdateTheme(theme) => {
-                self.app_state.active_theme = theme;
+            AppMessage::UpdateWindowTheme(theme) => {
+                self.app_state.window_theme = theme;
+                Task::none()
+            },
+            AppMessage::UpdateSyntaxTheme(theme) => {
+                self.app_state.syntax_theme = theme;
                 Task::none()
             },
             AppMessage::UpdateScale(value) => {
@@ -151,7 +155,7 @@ impl AppMain {
             .unwrap_or("rs")
             .to_string();
         let editor = text_editor(&self.app_state.file_content)
-            .highlight(ext.as_str(), highlighter::Theme::SolarizedDark)
+            .highlight(ext.as_str(), self.app_state.syntax_theme)
             .on_action(AppMessage::TextEdited)
             .height(Length::Fill)
             .font(self.app_state.font_monospaced.unwrap_or(Font::MONOSPACE));
@@ -177,7 +181,7 @@ impl AppMain {
     /// Iced function to get the Theme.
     ///
     pub fn theme(&self) -> Theme {
-        self.app_state.active_theme.clone()
+        self.app_state.window_theme.clone()
     }
 
     ///

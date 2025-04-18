@@ -14,6 +14,7 @@ use super::app_state::AppState;
 use super::app_const::{UI_CONTROL_SPACING, UI_CONTROL_PADDING, UI_TOOLBAR_BUTTON_SIZE, UI_TOOLTIP_PADDING};
 use super::app_style::AppStyle;
 use fa_iced as fa;
+use iced::advanced::text::highlighter;
 use iced::widget::container::Style;
 use rust_i18n::t;
 
@@ -30,10 +31,15 @@ impl AppToolbar {
             Some(app_state.scale_factor),
             AppMessage::UpdateScale,
         );
-        let theme_picker = PickList::new(
+        let window_theme_picker = PickList::new(
             &Theme::ALL[..],
-            Some(app_state.active_theme.clone()),
-            AppMessage::UpdateTheme,
+            Some(app_state.window_theme.clone()),
+            AppMessage::UpdateWindowTheme,
+        );
+        let syntax_theme_picker = PickList::new(
+            &iced::highlighter::Theme::ALL[..],
+            Some(app_state.syntax_theme.clone()),
+            AppMessage::UpdateSyntaxTheme,
         );
 
         let locale_list: Vec<String> = rust_i18n::available_locales!()
@@ -57,7 +63,8 @@ impl AppToolbar {
             create_button(fa::FA_ICON_SAVE, "file_save", AppMessage::SaveFile),
             horizontal_space(),
             scale_picker,
-            theme_picker,
+            window_theme_picker,
+            syntax_theme_picker,
             lang_picker,
         ]
             .spacing(UI_CONTROL_SPACING)

@@ -14,7 +14,8 @@ use crate::app_io::AppIOError;
 
 pub struct AppState {
     pub(crate) scale_factor: f64,
-    pub(crate) active_theme: Theme,
+    pub(crate) window_theme: Theme,
+    pub(crate) syntax_theme: iced::highlighter::Theme,
     pub(crate) file_path: Option<PathBuf>,
     pub(crate) file_dirty: bool,
     pub(crate) file_content: Content,
@@ -26,7 +27,8 @@ impl Default for AppState {
     fn default() -> Self {
         Self {
             scale_factor: 1.5,
-            active_theme: Theme::Dark,
+            window_theme: Theme::Dark,
+            syntax_theme: iced::highlighter::Theme::SolarizedDark,
             file_content: Content::default(),
             error: None,
             file_path: None,
