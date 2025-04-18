@@ -4,7 +4,8 @@
 //! Toolbar for main app window.
 //!
 
-use iced::{widget::{Container, container, button, horizontal_space, row, text}, Element, Length};
+use iced::{widget::{Container, container, button, horizontal_space, row}, Element, Length};
+use iced::widget::PickList;
 use super::app_message::AppMessage;
 use super::app_state::AppState;
 use super::app_const::{UI_CONTROL_SPACING, UI_CONTROL_PADDING, UI_TOOLBAR_BUTTON_SIZE};
@@ -19,11 +20,26 @@ impl AppToolbar {
         }
     }
     pub fn view(&self, app_state: &AppState) -> iced::Element<AppMessage> {
+        let locale_list = rust_i18n::available_locales!();
+        //
+        // TODO: Get the current locale!
+        //
+        //let locale_string: String = String::from(rust_i18n::locale());
+        //let cur: &str = rust_i18n::locale();
+        // let locale_value = rust_i18n::locale();
+        // let cur = locale_value.as_ref();
+        let lang_picker: PickList<&str, Vec<&str>, &str, AppMessage> = PickList::new(
+            locale_list,
+            Some(""),
+            AppMessage::UpdateLanguage,
+        );
+
         let row = row![
             create_button(iced_text_icon_new(), "New", Some(AppMessage::NewFile)),
             create_button(iced_text_icon_open(), "Open", Some(AppMessage::OpenFileFromDialog)),
             create_button(iced_text_icon_save(), "Save", Some(AppMessage::SaveFile)),
             horizontal_space(),
+            lang_picker,
         ]
             .spacing(UI_CONTROL_SPACING)
             .padding(UI_CONTROL_PADDING);

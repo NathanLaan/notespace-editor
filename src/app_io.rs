@@ -9,6 +9,7 @@ use std::io::ErrorKind;
 use std::path::{PathBuf};
 use std::sync::Arc;
 use std::result::Result;
+use rust_i18n::t;
 
 ///
 /// Load the specified `path` into a `String`.
@@ -32,7 +33,7 @@ pub async fn async_open_file_from_path(file_path: PathBuf) -> Result<(PathBuf,Ar
 ///
 pub async fn async_open_file_from_dialog() -> Result<(PathBuf, Arc<String>), AppIOError> {
     let file_handle = AsyncFileDialog::new()
-        .set_title("Select file to open...")
+        .set_title(t!("choose_file_open"))
         .pick_file()
         .await
         .ok_or(AppIOError::FileDialogClosedError)?;
@@ -45,7 +46,7 @@ pub async fn async_save_file_to_path(file_path: Option<PathBuf>, file_contents: 
         file_path
     } else {
         rfd::AsyncFileDialog::new()
-            .set_title("Choose a file name...")
+            .set_title(t!("choose_file_name"))
             .save_file()
             .await
             .ok_or(AppIOError::FileDialogClosedError)

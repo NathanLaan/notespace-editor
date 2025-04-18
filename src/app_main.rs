@@ -8,11 +8,11 @@ use iced::Font;
 use iced::{Element, Task, Theme, Length};
 use iced::widget::{container, column, text_editor};
 use super::app_toolbar::AppToolbar;
-use super::app_const::{APP_NAME};
 use super::app_message::AppMessage;
 use super::app_state::AppState;
 use super::app_statusbar::AppStatusbar;
 use super::app_io::{async_open_file_from_dialog, async_save_file_to_path};
+use rust_i18n::t;
 
 ///
 /// The top-level Iced Application component.
@@ -63,7 +63,7 @@ impl AppMain {
     /// Iced function to get the window title.
     ///
     pub fn title(&self) -> String {
-        APP_NAME.to_string()
+        t!("app_name").to_string()
     }
 
     ///
@@ -96,6 +96,9 @@ impl AppMain {
             },
             AppMessage::NewFile => {
                 if self.app_state.file_dirty {
+                    //
+                    // TODO: Show error dialog.
+                    //
                     println!("File Dirty");
                 } else {
                     self.app_state.file_path = None;
@@ -118,6 +121,11 @@ impl AppMain {
             },
             AppMessage::FileSaved(Err(error)) => {
                 self.app_state.error = Some(error);
+                Task::none()
+            },
+            AppMessage::UpdateLanguage(str) => {
+                println!("Language: {}", str);
+                rust_i18n::set_locale(str);
                 Task::none()
             },
         }

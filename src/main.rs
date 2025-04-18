@@ -16,6 +16,9 @@ use fa_iced::load_font_fontawesome;
 
 use iced::settings::Settings;
 use app_main::AppMain;
+extern crate rust_i18n;
+
+rust_i18n::i18n!("locales", fallback = "en");
 
 fn main() -> iced::Result {
     //
