@@ -74,12 +74,10 @@ impl AppMain {
     pub fn update(&mut self, message: AppMessage) -> Task<AppMessage> {
         match message {
             AppMessage::TextEdited(action) => {
-                if action.is_edit() {
-                    self.app_state.file_dirty = true;
-                }
-                self.app_state.file_content.perform(action);
                 // reset error
                 self.app_state.error = None;
+                self.app_state.file_dirty = self.app_state.file_dirty || action.is_edit();
+                self.app_state.file_content.perform(action);
                 Task::none()
             },
             AppMessage::OpenFileFromDialog => {

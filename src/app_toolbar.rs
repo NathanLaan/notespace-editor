@@ -17,6 +17,7 @@ use fa_iced as fa;
 use iced::advanced::text::highlighter;
 use iced::widget::container::Style;
 use rust_i18n::t;
+use crate::app_state;
 
 pub struct AppToolbar;
 
@@ -58,9 +59,10 @@ impl AppToolbar {
         );
 
         let row = row![
-            create_button(fa::FA_ICON_NEW, "file_new", AppMessage::NewFile),
-            create_button(fa::FA_ICON_OPEN, "file_open", AppMessage::OpenFileFromDialog),
-            create_button(fa::FA_ICON_SAVE, "file_save", AppMessage::SaveFile),
+            create_button(fa::FA_ICON_NEW, "file_new", Some(AppMessage::NewFile)),
+            create_button(fa::FA_ICON_OPEN, "file_open", Some(AppMessage::OpenFileFromDialog)),
+            create_button(fa::FA_ICON_SAVE, "file_save",
+                app_state.file_dirty.then_some(AppMessage::SaveFile)),
             horizontal_space(),
             scale_picker,
             window_theme_picker,
@@ -89,13 +91,13 @@ fn create_button<'a, Message: Clone + 'a>(
     //content: impl Into<Element<'a, Message>>,
     icon_key: &'a str,
     i18n_key: &'a str,
-    on_press: Message,
+    on_press: Option<Message>,
 ) -> Element<'a, Message> {
     let btn =
         button(container(fa::iced_text_icon(icon_key))
             .center_x(Length::Fill)
             .width(UI_TOOLBAR_BUTTON_SIZE))
-            .on_press(on_press);
+            .on_press_maybe(on_press);
     let tooltip_text = t!(i18n_key);
     tooltip(
         btn,

@@ -33,7 +33,7 @@ impl Default for AppState {
             error: None,
             file_path: None,
             font_monospaced: None,
-            file_dirty: false,
+            file_dirty: true,
         }
     }
 }
