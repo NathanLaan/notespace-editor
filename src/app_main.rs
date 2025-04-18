@@ -6,7 +6,9 @@
 
 use iced::Font;
 use iced::{Element, Task, Theme, Length};
+use iced::advanced::text::Highlight;
 use iced::widget::{container, column, text_editor};
+use iced::highlighter::{self, Highlighter};
 use super::app_toolbar::AppToolbar;
 use super::app_message::AppMessage;
 use super::app_state::AppState;
@@ -142,7 +144,14 @@ impl AppMain {
     /// Iced function to render the view.
     ///
     pub fn view(&self) -> Element<'_, AppMessage> {
+        let ext = self.app_state
+            .file_path
+            .as_ref()
+            .and_then(|path|path.extension()?.to_str())
+            .unwrap_or("rs")
+            .to_string();
         let editor = text_editor(&self.app_state.file_content)
+            .highlight(ext.as_str(), highlighter::Theme::SolarizedDark)
             .on_action(AppMessage::TextEdited)
             .height(Length::Fill)
             .font(self.app_state.font_monospaced.unwrap_or(Font::MONOSPACE));

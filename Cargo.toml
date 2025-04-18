@@ -6,7 +6,7 @@ license = "MIT"
 authors = ["Nathan Laan"]
 
 [dependencies]
-iced = {version = "0.13.1", features = ["tokio", "advanced"] }
+iced = {version = "0.13.1", features = ["tokio", "advanced", "highlighter"] }
 tokio = {version = "1.44", features = ["fs", "rt"]}
 rfd = {version = "0.15"}
 rust-i18n = {version = "3"}
