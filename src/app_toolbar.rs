@@ -25,7 +25,17 @@ impl AppToolbar {
         }
     }
     pub fn view(&self, app_state: &AppState) -> iced::Element<AppMessage> {
-        //let locale_list = rust_i18n::available_locales!();
+        let scale_picker = PickList::new(
+            vec!(0.5,0.75,1.0,1.25,1.50,1.75,2.0,2.25,2.5,3.0,4.0),
+            Some(app_state.scale_factor),
+            AppMessage::UpdateScale,
+        );
+        let theme_picker = PickList::new(
+            &Theme::ALL[..],
+            Some(app_state.active_theme.clone()),
+            AppMessage::UpdateTheme,
+        );
+
         let locale_list: Vec<String> = rust_i18n::available_locales!()
             .into_iter()
             .map(String::from)
@@ -46,6 +56,8 @@ impl AppToolbar {
             create_button(fa::FA_ICON_OPEN, "file_open", AppMessage::OpenFileFromDialog),
             create_button(fa::FA_ICON_SAVE, "file_save", AppMessage::SaveFile),
             horizontal_space(),
+            scale_picker,
+            theme_picker,
             lang_picker,
         ]
             .spacing(UI_CONTROL_SPACING)

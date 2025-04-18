@@ -127,6 +127,14 @@ impl AppMain {
                 rust_i18n::set_locale(str.as_ref());
                 Task::none()
             },
+            AppMessage::UpdateTheme(theme) => {
+                self.app_state.active_theme = theme;
+                Task::none()
+            },
+            AppMessage::UpdateScale(value) => {
+                self.app_state.scale_factor = value;
+                Task::none()
+            },
         }
     }
 

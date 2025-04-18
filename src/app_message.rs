@@ -6,6 +6,7 @@
 
 use std::path::PathBuf;
 use std::sync::Arc;
+use iced::Theme;
 use iced::widget::text_editor;
 use crate::app_io::AppIOError;
 
@@ -18,4 +19,6 @@ pub enum AppMessage {
     SaveFile,
     FileSaved(Result<PathBuf, AppIOError>),
     UpdateLanguage(String),
+    UpdateTheme(Theme),
+    UpdateScale(f64),
 }
