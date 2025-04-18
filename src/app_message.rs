@@ -17,5 +17,5 @@ pub enum AppMessage {
     NewFile,
     SaveFile,
     FileSaved(Result<PathBuf, AppIOError>),
-    UpdateLanguage(&'static str),
+    UpdateLanguage(String),
 }

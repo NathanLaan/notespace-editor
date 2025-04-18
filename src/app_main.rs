@@ -99,7 +99,7 @@ impl AppMain {
                     //
                     // TODO: Show error dialog.
                     //
-                    println!("File Dirty");
+                    println!("File Modified");
                 } else {
                     self.app_state.file_path = None;
                     self.app_state.file_content = text_editor::Content::new();
@@ -124,8 +124,7 @@ impl AppMain {
                 Task::none()
             },
             AppMessage::UpdateLanguage(str) => {
-                println!("Language: {}", str);
-                rust_i18n::set_locale(str);
+                rust_i18n::set_locale(str.as_ref());
                 Task::none()
             },
         }

@@ -4,13 +4,18 @@
 //! Toolbar for main app window.
 //!
 
-use iced::{widget::{Container, container, button, horizontal_space, row}, Element, Length};
+use std::ops::Deref;
+use iced::{border, widget::{Container, container, button, horizontal_space, row, tooltip, text}, Element, Length, Theme};
 use iced::widget::PickList;
+use iced::widget::tooltip::Position;
+use iced::widget::theme;
 use super::app_message::AppMessage;
 use super::app_state::AppState;
-use super::app_const::{UI_CONTROL_SPACING, UI_CONTROL_PADDING, UI_TOOLBAR_BUTTON_SIZE};
-use super::app_style::ColoredBackground;
+use super::app_const::{UI_CONTROL_SPACING, UI_CONTROL_PADDING, UI_TOOLBAR_BUTTON_SIZE, UI_TOOLTIP_PADDING};
+use super::app_style::AppStyle;
 use fa_iced as fa;
+use iced::widget::container::Style;
+use rust_i18n::t;
 
 pub struct AppToolbar;
 
@@ -20,24 +25,26 @@ impl AppToolbar {
         }
     }
     pub fn view(&self, app_state: &AppState) -> iced::Element<AppMessage> {
-        let locale_list = rust_i18n::available_locales!();
-        //
-        // TODO: Get the current locale!
-        //
-        //let locale_string: String = String::from(rust_i18n::locale());
-        //let cur: &str = rust_i18n::locale();
-        // let locale_value = rust_i18n::locale();
-        // let cur = locale_value.as_ref();
-        let lang_picker: PickList<&str, Vec<&str>, &str, AppMessage> = PickList::new(
+        //let locale_list = rust_i18n::available_locales!();
+        let locale_list: Vec<String> = rust_i18n::available_locales!()
+            .into_iter()
+            .map(String::from)
+            .collect();
+
+        // Create an owned String
+        let cur_locale = rust_i18n::locale().to_string();
+        //let selected_locale = Some(cur_locale.clone());
+        let selected_locale = Some(cur_locale);
+        let lang_picker: PickList<String, Vec<String>, String, AppMessage> = PickList::new(
             locale_list,
-            Some(""),
+            selected_locale,
             AppMessage::UpdateLanguage,
         );
 
         let row = row![
-            create_button(iced_text_icon_new(), "New", Some(AppMessage::NewFile)),
-            create_button(iced_text_icon_open(), "Open", Some(AppMessage::OpenFileFromDialog)),
-            create_button(iced_text_icon_save(), "Save", Some(AppMessage::SaveFile)),
+            create_button(fa::FA_ICON_NEW, "file_new", AppMessage::NewFile),
+            create_button(fa::FA_ICON_OPEN, "file_open", AppMessage::OpenFileFromDialog),
+            create_button(fa::FA_ICON_SAVE, "file_save", AppMessage::SaveFile),
             horizontal_space(),
             lang_picker,
         ]
@@ -60,24 +67,22 @@ impl AppToolbar {
 /// Create a button with the specified element and message handler.
 ///
 fn create_button<'a, Message: Clone + 'a>(
-    content: impl Into<Element<'a, Message>>,
-    label: &'a str,
-    on_press: Option<Message>,
+    //content: impl Into<Element<'a, Message>>,
+    icon_key: &'a str,
+    i18n_key: &'a str,
+    on_press: Message,
 ) -> Element<'a, Message> {
-    let btn = button(container(content).center_x(Length::Fill).width(UI_TOOLBAR_BUTTON_SIZE));
-    if let Some(on_press) = on_press {
-        btn.on_press(on_press).into()
-    } else {
-        btn.into()
-    }
-}
-
-fn iced_text_icon_new<'a, Message>() -> Element<'a, Message> {
-    fa::iced_text_icon(fa::FA_ICON_NEW)
-}
-fn iced_text_icon_open<'a, Message>() -> Element<'a, Message> {
-    fa::iced_text_icon(fa::FA_ICON_OPEN)
-}
-fn iced_text_icon_save<'a, Message>() -> Element<'a, Message> {
-    fa::iced_text_icon(fa::FA_ICON_SAVE)
+    let btn =
+        button(container(fa::iced_text_icon(icon_key))
+            .center_x(Length::Fill)
+            .width(UI_TOOLBAR_BUTTON_SIZE))
+            .on_press(on_press);
+    let tooltip_text = t!(i18n_key);
+    tooltip(
+        btn,
+        iced::widget::Text::new(tooltip_text),
+        Position::FollowCursor,
+    )
+        .style(AppStyle::rounded_box)
+        .into()
 }

@@ -20,6 +20,14 @@ pub const UI_CONTROL_SPACING: u16 = 5;
 pub const UI_CONTROL_PADDING: u16 = 5;
 
 ///
+/// Spacing around tooltips.
+///
+pub const UI_TOOLTIP_PADDING: u16 = 5;
+pub const UI_TOOLTIP_RADIUS: u16 = 5;
+
+
+
+///
 /// The size of text in the statusbar.
 ///
 pub const UI_STATUSBAR_TEXT_SIZE: u16 = 12;

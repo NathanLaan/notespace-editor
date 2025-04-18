@@ -4,11 +4,28 @@ app_name:
   de: "Notespace-Editor"
   en: "Notespace-Editor"
   fr: "Notespace-Editor"
+
 choose_file_name:
-  de: "Choose a file name..."
   en: "Choose a file name..."
-  fr: "Choose a file name..."
+  de: "Dateinamen wählen..."
+  fr: "Choisissez un nom de fichier..."
+
 choose_file_open:
-  de: "Choose a file to open..."
   en: "Choose a file to open..."
-  fr: "Choose a file to open..."
+  de: "Datei zum Öffnen auswählen..."
+  fr: "Choisissez un fichier à ouvrir..."
+
+file_open:
+  en: "Open a file..."
+  de: "Datei öffnen..."
+  fr: "Ouvrir un fichier..."
+
+file_save:
+  en: "Save file..."
+  de: "Datei speichern..."
+  fr: "Enregistrer le fichier..."
+
+file_new:
+  en: "New file"
+  de: "Neue Datei"
+  fr: "Nouveau fichier"
