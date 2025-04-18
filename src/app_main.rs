@@ -12,7 +12,7 @@ use super::app_const::{APP_NAME};
 use super::app_message::AppMessage;
 use super::app_state::AppState;
 use super::app_statusbar::AppStatusbar;
-use super::app_io::async_open_file_from_dialog;
+use super::app_io::{async_open_file_from_dialog, async_save_file_to_path};
 
 ///
 /// The top-level Iced Application component.
@@ -72,8 +72,10 @@ impl AppMain {
     pub fn update(&mut self, message: AppMessage) -> Task<AppMessage> {
         match message {
             AppMessage::TextEdited(action) => {
-                self.app_state.text_content.perform(action);
-                self.app_state.file_dirty = true;
+                if action.is_edit() {
+                    self.app_state.file_dirty = true;
+                }
+                self.app_state.file_content.perform(action);
                 // reset error
                 self.app_state.error = None;
                 Task::none()
@@ -85,7 +87,7 @@ impl AppMain {
             },
             AppMessage::FileOpened(Ok((file_path, content))) => {
                 self.app_state.file_path = Some(file_path);
-                self.app_state.text_content = text_editor::Content::with_text(content.as_ref());
+                self.app_state.file_content = text_editor::Content::with_text(content.as_ref());
                 Task::none()
             },
             AppMessage::FileOpened(Err(error)) => {
@@ -97,14 +99,21 @@ impl AppMain {
                     println!("File Dirty");
                 } else {
                     self.app_state.file_path = None;
-                    self.app_state.text_content = text_editor::Content::new();
+                    self.app_state.file_content = text_editor::Content::new();
                 }
                 Task::none()
             },
             AppMessage::SaveFile => {
-                Task::none()
+                Task::perform(
+                    async_save_file_to_path(
+                        self.app_state.file_path.clone(),
+                        self.app_state.file_content.text().clone(),
+                    ),
+                AppMessage::FileSaved)
             },
             AppMessage::FileSaved(Ok(file_name)) => {
+                self.app_state.file_path = Some(file_name);
+                self.app_state.file_dirty = false;
                 Task::none()
             },
             AppMessage::FileSaved(Err(error)) => {
@@ -118,7 +127,7 @@ impl AppMain {
     /// Iced function to render the view.
     ///
     pub fn view(&self) -> Element<'_, AppMessage> {
-        let editor = text_editor(&self.app_state.text_content)
+        let editor = text_editor(&self.app_state.file_content)
             .on_action(AppMessage::TextEdited)
             .height(Length::Fill)
             .font(self.app_state.font_monospaced.unwrap_or(Font::MONOSPACE));

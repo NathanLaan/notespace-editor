@@ -13,13 +13,13 @@ use iced::font::Font;
 use crate::app_io::AppIOError;
 
 pub struct AppState {
-    pub scale_factor: f64,
-    pub active_theme: Theme,
-    pub text_content: Content,
-    pub error: Option<AppIOError>,
-    pub file_path: Option<PathBuf>,
-    pub font_monospaced: Option<Font>,
+    pub(crate) scale_factor: f64,
+    pub(crate) active_theme: Theme,
+    pub(crate) file_path: Option<PathBuf>,
     pub(crate) file_dirty: bool,
+    pub(crate) file_content: Content,
+    pub(crate) error: Option<AppIOError>,
+    pub(crate) font_monospaced: Option<Font>,
 }
 
 impl Default for AppState {
@@ -27,7 +27,7 @@ impl Default for AppState {
         Self {
             scale_factor: 1.5,
             active_theme: Theme::Dark,
-            text_content: Content::default(),
+            file_content: Content::default(),
             error: None,
             file_path: None,
             font_monospaced: None,

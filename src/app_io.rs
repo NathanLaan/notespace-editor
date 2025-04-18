@@ -20,7 +20,7 @@ pub async fn async_open_file_from_path(file_path: PathBuf) -> Result<(PathBuf,Ar
         .await
         .map(Arc::new)
         .map_err(|error| error.kind())
-        .map_err(AppIOError::IOError)?;
+        .map_err(AppIOError::IOFailedError)?;
 
     Ok((file_path,file_contents))
 }
@@ -40,6 +40,24 @@ pub async fn async_open_file_from_dialog() -> Result<(PathBuf, Arc<String>), App
     async_open_file_from_path(file_path.to_owned()).await
 }
 
+pub async fn async_save_file_to_path(file_path: Option<PathBuf>, file_contents: String) -> Result<(PathBuf), AppIOError> {
+    let path = if let Some(file_path) = file_path {
+        file_path
+    } else {
+        rfd::AsyncFileDialog::new()
+            .set_title("Choose a file name...")
+            .save_file()
+            .await
+            .ok_or(AppIOError::FileDialogClosedError)
+            .map(|handle| handle.path().to_owned())?
+    };
+    tokio::fs::write(&path, &file_contents)
+        .await
+        .map_err(|error| AppIOError::IOFailedError(error.kind()))?;
+
+    Ok(path)
+}
+
 ///
 /// IO error definitions.
 ///
@@ -47,7 +65,7 @@ pub async fn async_open_file_from_dialog() -> Result<(PathBuf, Arc<String>), App
 #[derive(Debug, Clone)]
 pub enum AppIOError {
     FileDialogClosedError,
-    IOError(ErrorKind),
+    IOFailedError(ErrorKind),
 }
 
 impl std::fmt::Display for AppIOError {
@@ -55,7 +73,7 @@ impl std::fmt::Display for AppIOError {
         match self {
             AppIOError::FileDialogClosedError =>
                 write!(f, "AppIOError {}", "FileDialogClosedError"),
-            AppIOError::IOError(err) =>
+            AppIOError::IOFailedError(err) =>
                 write!(f, "AppIOError {}", err),
         }
     }

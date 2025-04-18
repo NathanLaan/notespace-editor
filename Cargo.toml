@@ -9,5 +9,6 @@ authors = ["Nathan Laan"]
 iced = {version = "0.13.1", features = ["tokio", "advanced"] }
 tokio = {version = "1.44", features = ["fs", "rt"]}
 rfd = {version = "0.15"}
-rust-iced-fa = "0.1.0"
-fa-iced = "0.1.1"
+
+# https://crates.io/crates/fa-iced
+fa-iced = "0.1.3"
