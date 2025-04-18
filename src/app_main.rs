@@ -73,6 +73,9 @@ impl AppMain {
         match message {
             AppMessage::TextEdited(action) => {
                 self.app_state.text_content.perform(action);
+                self.app_state.file_dirty = true;
+                // reset error
+                self.app_state.error = None;
                 Task::none()
             },
             AppMessage::OpenFileFromDialog => {
@@ -90,6 +93,12 @@ impl AppMain {
                 Task::none()
             },
             AppMessage::NewFile => {
+                if self.app_state.file_dirty {
+                    println!("File Dirty");
+                } else {
+                    self.app_state.file_path = None;
+                    self.app_state.text_content = text_editor::Content::new();
+                }
                 Task::none()
             },
             AppMessage::SaveFile => {

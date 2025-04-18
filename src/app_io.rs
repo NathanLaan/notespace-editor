@@ -49,3 +49,14 @@ pub enum AppIOError {
     FileDialogClosedError,
     IOError(ErrorKind),
 }
+
+impl std::fmt::Display for AppIOError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            AppIOError::FileDialogClosedError =>
+                write!(f, "AppIOError {}", "FileDialogClosedError"),
+            AppIOError::IOError(err) =>
+                write!(f, "AppIOError {}", err),
+        }
+    }
+}

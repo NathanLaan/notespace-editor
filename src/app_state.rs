@@ -19,6 +19,7 @@ pub struct AppState {
     pub error: Option<AppIOError>,
     pub file_path: Option<PathBuf>,
     pub font_monospaced: Option<Font>,
+    pub(crate) file_dirty: bool,
 }
 
 impl Default for AppState {
@@ -30,6 +31,7 @@ impl Default for AppState {
             error: None,
             file_path: None,
             font_monospaced: None,
+            file_dirty: false,
         }
     }
 }

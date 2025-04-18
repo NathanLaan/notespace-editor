@@ -4,6 +4,7 @@
 //! Statusbar for main app window.
 //!
 
+use std::fmt::format;
 use std::path::Path;
 use iced::{widget::{horizontal_space, text, Text, row}, Font, Renderer, Theme};
 use super::app_message::AppMessage;
@@ -27,16 +28,21 @@ impl AppStatusbar {
         // Create text() control with the file_path.
         // Handle paths that crash with and_then().
         //
-        let file_path_display: Text<Theme, Renderer> = match app_state
-            .file_path
-            .as_deref()
-            .and_then(Path::to_str) {
-                Some(file_path) =>
-                    text(file_path)
-                        .font(app_state.font_monospaced.unwrap_or(Font::MONOSPACE))
-                        .size(UI_STATUSBAR_TEXT_SIZE),
-                None => text(""),
+        let file_path_display: Text<Theme, Renderer> = match &app_state
+            .error {
+                Some(e) => Text::new(format!("Error: {}", e.to_string())),
+                None => match app_state
+                    .file_path
+                    .as_deref()
+                    .and_then(Path::to_str) {
+                    Some(file_path) =>
+                        text(file_path)
+                            .font(app_state.font_monospaced.unwrap_or(Font::MONOSPACE))
+                            .size(UI_STATUSBAR_TEXT_SIZE),
+                    None => text(""),
+                }
             };
+
 
         let cursor_position = {
             let (l,c) = app_state.text_content.cursor_position();
