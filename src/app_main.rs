@@ -86,6 +86,7 @@ impl AppMain {
                     AppMessage::FileOpened)
             },
             AppMessage::FileOpened(Ok((file_path, content))) => {
+                self.app_state.file_dirty = false;
                 self.app_state.file_path = Some(file_path);
                 self.app_state.file_content = text_editor::Content::with_text(content.as_ref());
                 Task::none()
@@ -101,6 +102,7 @@ impl AppMain {
                     //
                     println!("File Modified");
                 } else {
+                    self.app_state.file_dirty = false;
                     self.app_state.file_path = None;
                     self.app_state.file_content = text_editor::Content::new();
                 }

@@ -93,6 +93,7 @@ fn create_button<'a, Message: Clone + 'a>(
     i18n_key: &'a str,
     on_press: Option<Message>,
 ) -> Element<'a, Message> {
+    let is_disabled = on_press.is_none();
     let btn =
         button(container(fa::iced_text_icon(icon_key))
             .center_x(Length::Fill)
