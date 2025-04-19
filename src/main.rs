@@ -30,6 +30,8 @@ fn main() -> iced::Result {
     let mut window_settings = iced::window::Settings::default();
     window_settings.size = iced::Size::new(1200.0,1024.0);
     iced::application(AppMain::title, AppMain::update, AppMain::view)
+        //.subscription(AppMain::subscribe)
+        .subscription(AppMain::subscription)
         .window(window_settings)
         .scale_factor(AppMain::scale_factor)
         .theme(AppMain::theme)

@@ -6,9 +6,12 @@
 
 use iced::Font;
 use iced::{Element, Task, Theme, Length};
+use iced::event::{self, Status};
+use iced::keyboard::{key::Named, Event::KeyPressed, Key, Modifiers};
 use iced::advanced::text::Highlight;
 use iced::widget::{container, column, text_editor};
 use iced::highlighter::{self, Highlighter};
+use iced::keyboard::Key::Character;
 use super::app_toolbar::AppToolbar;
 use super::app_message::AppMessage;
 use super::app_state::AppState;
@@ -49,6 +52,7 @@ impl AppMain {
     // type Message = AppMessage;
     // type Theme = Theme;
     // type Flags = ();
+    //type State = AppState;
 
     ///
     /// Constructor.
@@ -141,8 +145,87 @@ impl AppMain {
                 self.app_state.scale_factor = value;
                 Task::none()
             },
+            AppMessage::KeyPressed(key, modifiers) => {
+                println!("KeyPressed: {:?} {:?}", key, modifiers);
+                //
+                //
+                //
+                Task::none()
+            },
+            AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::KeyPressed {
+                                                                key,
+                                                                modifiers,
+                                                                ..
+                                                            })) => {
+                let mod_command = modifiers.contains(Modifiers::COMMAND);
+                let mod_ctrl = modifiers.contains(Modifiers::CTRL);
+                //
+                // TODO: Check Platform!
+                //
+                // TODO: Filter our SHIFT and ALT...
+                //
+                if mod_command || mod_ctrl {
+                    println!("KeyPressed: {:?} {:?}", key, modifiers);
+                    match key.as_ref() {
+                        iced::keyboard::Key::Character("s") => {
+                            println!("SAVE!: {:?} {:?}", key, modifiers);
+                        }
+                        _ => {}
+                    }
+                }
+                let last_key = Some(key);
+                Task::none()
+            },
+            AppMessage::KeyPressedEvent(_) => {Task::none()}
+            AppMessage::EventOccurred(iced::Event::Mouse(_)) => {Task::none()}
+            AppMessage::EventOccurred(iced::Event::Window(_)) => {Task::none()}
+            AppMessage::EventOccurred(iced::Event::Touch(_)) => {Task::none()}
+            AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::ModifiersChanged(_))) => {Task::none()}
+            AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::KeyReleased { .. })) => {Task::none()}
         }
     }
+
+    pub(crate) fn subscribe(&mut self) -> Vec<iced::Subscription<AppMessage>> {
+        println!("subscribe()");
+
+        vec![]
+    }
+    pub(crate) fn subscription(&self) -> iced::Subscription<AppMessage> {
+        event::listen().map(AppMessage::EventOccurred)
+    }
+
+
+    fn _subscription2(&self, state: AppState) -> Option<iced::Subscription<AppMessage>> {
+        let subscription_event = event::listen_with(|event,
+                                    status,
+                                    id,
+        | match (event) {
+            (iced::Event::Keyboard(iced::keyboard::Event::KeyPressed {
+                key,
+                modified_key,
+                physical_key,
+                location,
+                modifiers,
+                text }
+            )) => Some(AppMessage::KeyPressed(key, modifiers)),
+            _ => None,
+        });
+        subscription_event.into()
+    }
+
+    // fn subscription(&self) -> iced::Subscription<AppMessage> {
+    //     subscription::events_with(|event, _status| match event {
+    //         iced::Event::Keyboard(iced::keyboard::Event::KeyPressed {
+    //                             key_code,
+    //                             modifiers: _,
+    //                         }) => Some(AppMessage::KeyPressedEvent(key_code)),
+    //         _ => Some(AppMessage::Ignored),
+    //     })
+    // }
+    //
+    // fn subscription(&self) -> iced::Subscription<AppMessage> {
+    //     iced::Subscription::events().map(Message::EventOccurred)
+    // }
 
     ///
     /// Iced function to render the view.

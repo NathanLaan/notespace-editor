@@ -4,10 +4,13 @@ A basic text editor implemented in Rust using the [Iced](https://iced.rs/) GUI l
 
 # TODO
 
-- Shortcut keys
-- Copy, Cut, Paste
-- Control and text alignment in statusbar
+- Shortcut keys.
+- Copy, Cut, Paste.
+- Control and text alignment in statusbar.
 - Support Tab key to move between controls.
+- Scrollbars.
+- Font size.
+- Sidebar.
 
 ## References
 

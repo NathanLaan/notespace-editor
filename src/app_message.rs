@@ -21,4 +21,7 @@ pub enum AppMessage {
     UpdateWindowTheme(iced::Theme),
     UpdateSyntaxTheme(iced::highlighter::Theme),
     UpdateScale(f64),
+    KeyPressed(iced::keyboard::Key, iced::keyboard::Modifiers),
+    KeyPressedEvent(iced::keyboard::Key),
+    EventOccurred(iced::Event),
 }
