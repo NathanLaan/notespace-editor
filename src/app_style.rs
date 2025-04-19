@@ -32,12 +32,19 @@ impl AppStyle {
     }
 
 
-    pub(crate) fn rounded_box(theme: &Theme) -> Style {
+    pub(crate) fn tooltip_style(theme: &Theme) -> Style {
         let palette = theme.extended_palette();
-
         Style {
             background: Some(palette.background.weak.color.into()),
             border: border::rounded(UI_TOOLTIP_RADIUS),
+            ..Style::default()
+        }
+    }
+    
+    pub(crate) fn toolbar_theme(theme: &Theme) -> Style {
+        let palette = theme.extended_palette();
+        Style {
+            background: Some(palette.background.strong.color.into()),
             ..Style::default()
         }
     }
