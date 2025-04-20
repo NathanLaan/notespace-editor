@@ -17,6 +17,7 @@ use super::app_toolbar::AppToolbar;
 use super::app_message::AppMessage;
 use super::app_state::AppState;
 use super::app_statusbar::AppStatusbar;
+use super::app_configuration::AppConfiguration;
 use super::app_io::{async_open_file_from_dialog, async_save_file_to_path};
 use rust_i18n::t;
 
@@ -27,7 +28,7 @@ pub struct AppMain {
     app_state: AppState,
     toolbar: AppToolbar,
     statusbar: AppStatusbar,
-    scrollable_editor: iced::widget::scrollable::Id,
+    user_config: AppConfiguration,
 }
 
 ///
@@ -40,7 +41,7 @@ impl Default for AppMain {
             app_state,
             toolbar: AppToolbar::new(),
             statusbar: AppStatusbar::new(),
-            scrollable_editor: iced::widget::scrollable::Id::unique(),
+            user_config: AppConfiguration::default(),
         }
     }
 }
@@ -184,6 +185,10 @@ impl AppMain {
             AppMessage::EventOccurred(iced::Event::Touch(_)) => {Task::none()}
             AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::ModifiersChanged(_))) => {Task::none()}
             AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::KeyReleased { .. })) => {Task::none()}
+            AppMessage::WindowResized(w, h) => {
+
+                Task::none()
+            }
         }
     }
 
@@ -239,6 +244,10 @@ impl AppMain {
     ///
     pub(crate) fn subscription(&self) -> iced::Subscription<AppMessage> {
         event::listen().map(AppMessage::EventOccurred)
+        // iced::window::Event::subscription().map(|event| match event {
+        //     iced::window::Event::Resized { width, height } => AppMessage::WindowResized(width, height),
+        //     _ => AppMessage::NoOp,
+        // })
     }
 
 }

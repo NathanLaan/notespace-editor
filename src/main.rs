@@ -12,6 +12,8 @@ mod app_statusbar;
 mod app_io;
 mod app_toolbar;
 mod app_style;
+mod app_configuration;
+
 use app_main::AppMain;
 use fa_iced::load_font_fontawesome;
 extern crate rust_i18n;
