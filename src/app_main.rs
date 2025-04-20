@@ -6,7 +6,8 @@
 
 use iced::Font;
 use iced::{Element, Task, Theme, Length};
-use iced::event::{self, Status};
+use iced::advanced::layout::padded;
+use iced::event;
 use iced::keyboard::{key::Named, Event::KeyPressed, Key, Modifiers};
 use iced::advanced::text::Highlight;
 use iced::widget::{container, column, text_editor};
@@ -186,78 +187,36 @@ impl AppMain {
         }
     }
 
-    pub(crate) fn subscribe(&mut self) -> Vec<iced::Subscription<AppMessage>> {
-        println!("subscribe()");
-
-        vec![]
-    }
-    pub(crate) fn subscription(&self) -> iced::Subscription<AppMessage> {
-        event::listen().map(AppMessage::EventOccurred)
-    }
-
-
-    fn _subscription2(&self, state: AppState) -> Option<iced::Subscription<AppMessage>> {
-        let subscription_event = event::listen_with(|event,
-                                    status,
-                                    id,
-        | match (event) {
-            (iced::Event::Keyboard(iced::keyboard::Event::KeyPressed {
-                key,
-                modified_key,
-                physical_key,
-                location,
-                modifiers,
-                text }
-            )) => Some(AppMessage::KeyPressed(key, modifiers)),
-            _ => None,
-        });
-        subscription_event.into()
-    }
-
-    // fn subscription(&self) -> iced::Subscription<AppMessage> {
-    //     subscription::events_with(|event, _status| match event {
-    //         iced::Event::Keyboard(iced::keyboard::Event::KeyPressed {
-    //                             key_code,
-    //                             modifiers: _,
-    //                         }) => Some(AppMessage::KeyPressedEvent(key_code)),
-    //         _ => Some(AppMessage::Ignored),
-    //     })
-    // }
-    //
-    // fn subscription(&self) -> iced::Subscription<AppMessage> {
-    //     iced::Subscription::events().map(Message::EventOccurred)
-    // }
-
     ///
     /// Iced function to render the view.
     ///
     pub fn view(&self) -> Element<'_, AppMessage> {
-        let ext = self.app_state
+        let file_extension = self.app_state
             .file_path
             .as_ref()
             .and_then(|path|path.extension()?.to_str())
-            .unwrap_or("rs")
+            .unwrap_or("md") // TODO: App config setting for default file extension.
             .to_string();
         let editor = text_editor(&self.app_state.file_content)
-            .highlight(ext.as_str(), self.app_state.syntax_theme)
+            .highlight(file_extension.as_str(), self.app_state.syntax_theme)
             .on_action(AppMessage::TextEdited)
-            .height(Length::Fill)
             .font(self.app_state.font_monospaced.unwrap_or(Font::MONOSPACE));
+        let scrollable_container = iced::widget::Scrollable::new(editor)
+            .width(Length::Fill)
+            .height(Length::Fill);
+            //.style(iced::widget::container::bordered_box);
 
         //
-        // TODO: Fix for iced 0.13 scrolling.
+        // [ TOOLBAR   ]
+        // [ EDITOR    ]
+        // [ STATUSBAR ]
         //
-        //scrollable(column![editor]).into();
-        // let scrollable = Scrollable::new(self.scrollable_editor.clone())
-        //     .height(Length::Fill)
-        //     .push(editor);
-
         container(column![
             self.toolbar.view(&self.app_state),
-            editor,
+            scrollable_container,
             self.statusbar.view(&self.app_state),
         ])
-            .padding(5)
+            .padding(0)
             .into()
     }
 
@@ -273,6 +232,13 @@ impl AppMain {
     ///
     pub fn scale_factor(&self) -> f64 {
         self.app_state.scale_factor.clone()
+    }
+
+    ///
+    /// Iced function to handle subscriptions (async events).
+    ///
+    pub(crate) fn subscription(&self) -> iced::Subscription<AppMessage> {
+        event::listen().map(AppMessage::EventOccurred)
     }
 
 }
