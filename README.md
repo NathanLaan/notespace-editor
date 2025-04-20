@@ -11,6 +11,9 @@ A basic text editor implemented in Rust using the [Iced](https://iced.rs/) GUI l
 - Scrollbars.
 - Font size.
 - Sidebar.
+- Settings screen/view in dialog or main window area.
+- Configurable keyboard shortcuts.
+- Keyboard shortcuts in toolbar tooltips.
 
 ## References
 
