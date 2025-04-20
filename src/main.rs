@@ -25,12 +25,11 @@ fn main() -> iced::Result {
     load_font_fontawesome();
 
     //
-    // Setup and run the app.
+    // Initialize and run the app.
     //
     let mut window_settings = iced::window::Settings::default();
     window_settings.size = iced::Size::new(1200.0,1024.0);
     iced::application(AppMain::title, AppMain::update, AppMain::view)
-        //.subscription(AppMain::subscribe)
         .subscription(AppMain::subscription)
         .window(window_settings)
         .scale_factor(AppMain::scale_factor)
