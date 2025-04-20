@@ -157,23 +157,24 @@ impl AppMain {
                                                                 modifiers,
                                                                 ..
                                                             })) => {
-                let mod_command = modifiers.contains(Modifiers::COMMAND);
-                let mod_ctrl = modifiers.contains(Modifiers::CTRL);
                 //
                 // TODO: Check Platform!
                 //
-                // TODO: Filter our SHIFT and ALT...
-                //
-                if mod_command || mod_ctrl {
+                if (modifiers.control() || modifiers.command()) 
+                    && !modifiers.shift() 
+                    && !modifiers.alt() {
                     println!("KeyPressed: {:?} {:?}", key, modifiers);
                     match key.as_ref() {
-                        iced::keyboard::Key::Character("s") => {
+                        Character("s") => {
                             println!("SAVE!: {:?} {:?}", key, modifiers);
                         }
                         _ => {}
                     }
                 }
-                let last_key = Some(key);
+                //
+                // TODO: For situations where we track multi-key presses.
+                //
+                //let last_key = Some(key);
                 Task::none()
             },
             AppMessage::KeyPressedEvent(_) => {Task::none()}
