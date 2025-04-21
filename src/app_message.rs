@@ -26,4 +26,6 @@ pub enum AppMessage {
     EventOccurred(iced::Event),
     WindowResized(f32, f32),
     SaveAppConfiguration,
+    TabPressed,
+    FocusChanged(Option<iced::advanced::widget::Id>),
 }

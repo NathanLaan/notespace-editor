@@ -198,6 +198,12 @@ impl AppMain {
                     self.app_state.app_configuration_changed = false;
                 }
                 Task::none()
+            },
+            AppMessage::TabPressed => {
+              Task::none()
+            },
+            AppMessage::FocusChanged(id) => {
+                Task::none()
             }
         }
     }
