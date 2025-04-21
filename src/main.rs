@@ -30,6 +30,10 @@ fn main() -> iced::Result {
     load_font_fontawesome();
 
     //
+    // TODO: Load app configuration here to get window size and location
+    //
+
+    //
     // Initialize and run the app.
     //
     let mut window_settings = iced::window::Settings::default();
@@ -40,4 +44,5 @@ fn main() -> iced::Result {
         .scale_factor(AppMain::scale_factor)
         .theme(AppMain::theme)
         .run()
+    //AppMain::run(iced::Settings::default())
 }

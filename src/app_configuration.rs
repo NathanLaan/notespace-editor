@@ -13,8 +13,10 @@ use serde::{Serialize, Deserialize};
 ///
 #[derive(Serialize, Deserialize)]
 pub(crate) struct AppConfiguration {
-    pub window_width: u32,
-    pub window_height: u32,
+    pub window_x: f32,
+    pub window_y: f32,
+    pub window_w: f32,
+    pub window_h: f32,
     pub scale_factor: f32,
     pub window_theme_name: String,
     pub syntax_theme_name: String,
@@ -23,8 +25,10 @@ pub(crate) struct AppConfiguration {
 impl Default for AppConfiguration {
     fn default() -> Self {
         Self {
-            window_width: 800,
-            window_height: 600,
+            window_x: 100.0,
+            window_y: 100.0,
+            window_w: 800.0,
+            window_h: 600.0,
             scale_factor: 1.0,
             window_theme_name: iced::Theme::default().to_string(),
             syntax_theme_name: iced::highlighter::Theme::SolarizedDark.to_string(),

@@ -24,5 +24,6 @@ pub enum AppMessage {
     KeyPressed(iced::keyboard::Key, iced::keyboard::Modifiers),
     KeyPressedEvent(iced::keyboard::Key),
     EventOccurred(iced::Event),
-    WindowResized(u32, u32),
+    WindowResized(f32, f32),
+    SaveAppConfiguration,
 }

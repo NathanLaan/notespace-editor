@@ -13,6 +13,7 @@ use iced::advanced::text::Highlight;
 use iced::widget::{container, column, text_editor};
 use iced::highlighter::{self, Highlighter};
 use iced::keyboard::Key::Character;
+use iced::widget::shader::wgpu::naga::ImageQuery::Size;
 use super::app_toolbar::AppToolbar;
 use super::app_message::AppMessage;
 use super::app_state::AppState;
@@ -28,7 +29,7 @@ pub struct AppMain {
     app_state: AppState,
     toolbar: AppToolbar,
     statusbar: AppStatusbar,
-    user_config: AppConfiguration,
+    app_configuration: AppConfiguration,
 }
 
 ///
@@ -41,7 +42,7 @@ impl Default for AppMain {
             app_state,
             toolbar: AppToolbar::new(),
             statusbar: AppStatusbar::new(),
-            user_config: AppConfiguration::default(),
+            app_configuration: AppConfiguration::default(),
         }
     }
 }
@@ -50,11 +51,11 @@ impl AppMain {
     // ///
     // /// Iced Application Traits:
     // ///
-    // type Executor = executor::Default;
+    // type Executor = iced::executor::Default;
     // type Message = AppMessage;
     // type Theme = Theme;
     // type Flags = ();
-    //type State = AppState;
+    // //type State = AppState;
 
     ///
     /// Constructor.
@@ -179,16 +180,33 @@ impl AppMain {
                 //let last_key = Some(key);
                 Task::none()
             },
-            AppMessage::KeyPressedEvent(_) => {Task::none()}
-            AppMessage::EventOccurred(iced::Event::Mouse(_)) => {Task::none()}
-            AppMessage::EventOccurred(iced::Event::Window(_)) => {Task::none()}
-            AppMessage::EventOccurred(iced::Event::Touch(_)) => {Task::none()}
-            AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::ModifiersChanged(_))) => {Task::none()}
-            AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::KeyReleased { .. })) => {Task::none()}
+            AppMessage::KeyPressedEvent(_) => {Task::none()},
+            AppMessage::EventOccurred(iced::Event::Mouse(_)) => {Task::none()},
+            AppMessage::EventOccurred(iced::Event::Window(_)) => {Task::none()},
+            AppMessage::EventOccurred(iced::Event::Touch(_)) => {Task::none()},
+            AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::ModifiersChanged(_))) => {Task::none()},
+            AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::KeyReleased { .. })) => {Task::none()},
             AppMessage::WindowResized(w, h) => {
-
+                self.app_configuration.window_w = w;
+                self.app_configuration.window_h = h;
+                self.app_configuration.save();
+                Task::none()
+            },
+            AppMessage::SaveAppConfiguration => {
+                if self.app_state.app_configuration_changed {
+                    self.app_configuration.save();
+                    self.app_state.app_configuration_changed = false;
+                }
                 Task::none()
             }
+        }
+    }
+
+    pub fn window(&self) -> iced::window::Settings {
+        println!("AppMain::window()");
+        iced::window::Settings {
+            size: iced::Size::new(self.app_configuration.window_w, self.app_configuration.window_h),
+            ..iced::window::Settings::default()
         }
     }
 
@@ -242,7 +260,7 @@ impl AppMain {
     ///
     /// Iced function to handle subscriptions (async events).
     ///
-    pub(crate) fn subscription(&self) -> iced::Subscription<AppMessage> {
+    pub fn subscription(&self) -> iced::Subscription<AppMessage> {
         event::listen().map(AppMessage::EventOccurred)
         // iced::window::Event::subscription().map(|event| match event {
         //     iced::window::Event::Resized { width, height } => AppMessage::WindowResized(width, height),

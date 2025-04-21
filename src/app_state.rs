@@ -21,6 +21,7 @@ pub struct AppState {
     pub(crate) file_content: Content,
     pub(crate) error: Option<AppIOError>,
     pub(crate) font_monospaced: Option<Font>,
+    pub(crate) app_configuration_changed:bool,
 }
 
 impl Default for AppState {
@@ -29,11 +30,12 @@ impl Default for AppState {
             scale_factor: 1.5,
             window_theme: Theme::Dark,
             syntax_theme: iced::highlighter::Theme::SolarizedDark,
+            file_path: None,
+            file_dirty: false,
             file_content: Content::default(),
             error: None,
-            file_path: None,
             font_monospaced: None,
-            file_dirty: false,
+            app_configuration_changed: false,
         }
     }
 }
