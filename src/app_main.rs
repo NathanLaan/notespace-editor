@@ -10,6 +10,7 @@ use iced::advanced::layout::padded;
 use iced::event;
 use iced::keyboard::{key::Named, Event::KeyPressed, Key, Modifiers};
 use iced::advanced::text::Highlight;
+use iced::application::Update;
 use iced::widget::{container, column, text_editor};
 use iced::highlighter::{self, Highlighter};
 use iced::keyboard::Key::Character;
@@ -69,16 +70,9 @@ impl AppMain {
     }
 
     ///
-    /// Iced function to get the window title.
-    ///
-    pub fn title(&self) -> String {
-        t!("app_name").to_string()
-    }
-
-    ///
     /// Iced function to handle messages.
     ///
-    pub fn update(&mut self, message: AppMessage) -> Task<AppMessage> {
+    pub(crate) fn update(&mut self, message: AppMessage) -> Task<AppMessage> {
         match message {
             AppMessage::TextEdited(action) => {
                 // reset error
@@ -121,7 +115,7 @@ impl AppMain {
                         self.app_state.file_path.clone(),
                         self.app_state.file_content.text().clone(),
                     ),
-                AppMessage::FileSaved)
+                    AppMessage::FileSaved)
             },
             AppMessage::FileSaved(Ok(file_name)) => {
                 self.app_state.file_path = Some(file_name);
@@ -163,8 +157,8 @@ impl AppMain {
                 //
                 // TODO: Check Platform!
                 //
-                if (modifiers.control() || modifiers.command()) 
-                    && !modifiers.shift() 
+                if (modifiers.control() || modifiers.command())
+                    && !modifiers.shift()
                     && !modifiers.alt() {
                     println!("KeyPressed: {:?} {:?}", key, modifiers);
                     match key.as_ref() {
@@ -200,7 +194,7 @@ impl AppMain {
                 Task::none()
             },
             AppMessage::TabPressed => {
-              Task::none()
+                Task::none()
             },
             AppMessage::FocusChanged(id) => {
                 Task::none()
@@ -208,7 +202,14 @@ impl AppMain {
         }
     }
 
-    pub fn window(&self) -> iced::window::Settings {
+    ///
+    /// Iced function to get the window title.
+    ///
+    pub(crate) fn title(&self) -> String {
+        t!("app_name").to_string()
+    }
+
+    pub(crate) fn window(&self) -> iced::window::Settings {
         println!("AppMain::window()");
         iced::window::Settings {
             size: iced::Size::new(self.app_configuration.window_w, self.app_configuration.window_h),
@@ -219,7 +220,7 @@ impl AppMain {
     ///
     /// Iced function to render the view.
     ///
-    pub fn view(&self) -> Element<'_, AppMessage> {
+    pub(crate) fn view(&self) -> Element<'_, AppMessage> {
         let file_extension = self.app_state
             .file_path
             .as_ref()
@@ -252,21 +253,21 @@ impl AppMain {
     ///
     /// Iced function to get the Theme.
     ///
-    pub fn theme(&self) -> Theme {
+    pub(crate) fn theme(&self) -> Theme {
         self.app_state.window_theme.clone()
     }
 
     ///
     /// Iced function to get the view scale_factor.
     ///
-    pub fn scale_factor(&self) -> f64 {
+    pub(crate) fn scale_factor(&self) -> f64 {
         self.app_state.scale_factor.clone()
     }
 
     ///
     /// Iced function to handle subscriptions (async events).
     ///
-    pub fn subscription(&self) -> iced::Subscription<AppMessage> {
+    pub(crate) fn subscription(&self) -> iced::Subscription<AppMessage> {
         event::listen().map(AppMessage::EventOccurred)
         // iced::window::Event::subscription().map(|event| match event {
         //     iced::window::Event::Resized { width, height } => AppMessage::WindowResized(width, height),
