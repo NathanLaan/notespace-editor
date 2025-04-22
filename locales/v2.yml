@@ -49,3 +49,8 @@ scale_factor:
   en: "Window scale factor"
   de: "Fensterskalierungsfaktor"
   fr: "Facteur d’échelle de la fenêtre"
+
+app_configuration:
+  en: "Settings"
+  de: "Einstellungen"
+  fr: "Paramètres"

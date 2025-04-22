@@ -11,9 +11,11 @@ use iced::event;
 use iced::keyboard::{key::Named, Event::KeyPressed, Key, Modifiers};
 use iced::advanced::text::Highlight;
 use iced::application::Update;
+use iced::widget::{stack, center, horizontal_space, mouse_area, opaque, text_input, button};
 use iced::widget::{container, column, text_editor};
 use iced::highlighter::{self, Highlighter};
 use iced::keyboard::Key::Character;
+use iced::widget::button::text;
 use iced::widget::shader::wgpu::naga::ImageQuery::Size;
 use super::app_toolbar::AppToolbar;
 use super::app_message::AppMessage;
@@ -31,6 +33,7 @@ pub struct AppMain {
     toolbar: AppToolbar,
     statusbar: AppStatusbar,
     app_configuration: AppConfiguration,
+    show_app_configuration_modal: bool,
 }
 
 ///
@@ -44,6 +47,7 @@ impl Default for AppMain {
             toolbar: AppToolbar::new(),
             statusbar: AppStatusbar::new(),
             app_configuration: AppConfiguration::default(),
+            show_app_configuration_modal: false,
         }
     }
 }
@@ -198,7 +202,15 @@ impl AppMain {
             },
             AppMessage::FocusChanged(id) => {
                 Task::none()
-            }
+            },
+            AppMessage::OpenAppConfigurationModal => {
+                self.show_app_configuration_modal = true;
+                Task::none()
+            },
+            AppMessage::CloseAppConfigurationModal => {
+                self.show_app_configuration_modal = false;
+                Task::none()
+            },
         }
     }
 
@@ -234,20 +246,41 @@ impl AppMain {
         let scrollable_container = iced::widget::Scrollable::new(editor)
             .width(Length::Fill)
             .height(Length::Fill);
-            //.style(iced::widget::container::bordered_box);
+        //.style(iced::widget::container::bordered_box);
 
         //
         // [ TOOLBAR   ]
         // [ EDITOR    ]
         // [ STATUSBAR ]
         //
-        container(column![
+        let base_contents = container(column![
             self.toolbar.view(&self.app_state),
             scrollable_container,
             self.statusbar.view(&self.app_state),
         ])
-            .padding(0)
-            .into()
+            .padding(0);
+
+        if self.show_app_configuration_modal {
+            let modal_contents = container(
+                column![
+                    iced::widget::text("Settings"),
+                    iced::widget::text("Setting 1"),
+                    iced::widget::text("Setting 2"),
+                    iced::widget::text("Setting 3"),
+                    button(iced::widget::text("OK")).on_press(AppMessage::CloseAppConfigurationModal),
+                ]
+                    .spacing(20),
+            )
+                .width(600)
+                .padding(10)
+                .style(container::rounded_box);
+
+            AppMain::modal(base_contents,
+                           modal_contents,
+                           AppMessage::CloseAppConfigurationModal)
+        } else {
+            base_contents.into()
+        }
     }
 
     ///
@@ -273,6 +306,38 @@ impl AppMain {
         //     iced::window::Event::Resized { width, height } => AppMessage::WindowResized(width, height),
         //     _ => AppMessage::NoOp,
         // })
+    }
+
+    ///
+    /// Show a modal dialog over the `base_contents` of the window.
+    ///
+    fn modal<'a, AppMessage>(
+        base_contents: impl Into<Element<'a, AppMessage>>,
+        modal_contents: impl Into<Element<'a, AppMessage>>,
+        on_press_event: AppMessage,
+    ) -> Element<'a, AppMessage>
+    where
+        AppMessage: Clone + 'a,
+    {
+        stack![
+            base_contents.into(),
+            opaque(
+                mouse_area(center(opaque(modal_contents)).style(|_theme| {
+                    container::Style {
+                        background: Some(
+                            iced::Color {
+                                a: 0.9,
+                                ..iced::Color::BLACK
+                            }
+                            .into(),
+                        ),
+                        ..container::Style::default()
+                    }
+                }))
+                .on_press(on_press_event)
+            )
+        ]
+            .into()
     }
 
 }

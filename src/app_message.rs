@@ -28,4 +28,6 @@ pub enum AppMessage {
     SaveAppConfiguration,
     TabPressed,
     FocusChanged(Option<iced::advanced::widget::Id>),
+    OpenAppConfigurationModal,
+    CloseAppConfigurationModal,
 }

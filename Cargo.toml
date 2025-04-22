@@ -7,11 +7,12 @@ authors = ["Nathan Laan"]
 
 [dependencies]
 iced = {version = "0.13.1", features = ["tokio", "advanced", "highlighter"] }
+iced_aw = "0.12"
 tokio = {version = "1.44", features = ["fs", "rt"]}
 rfd = {version = "0.15"}
 rust-i18n = {version = "3"}
 # https://crates.io/crates/fa-iced
-fa-iced = "0.1.4"
+fa-iced = "0.2.0"
 toml = "0.8"
 dirs = "4.0.0"
 serde = { version = "1.0.219", features = ["derive"] }

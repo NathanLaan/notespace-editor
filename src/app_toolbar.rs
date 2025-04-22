@@ -88,6 +88,7 @@ impl AppToolbar {
             create_button(fa::FA_ICON_OPEN, "file_open", Some(AppMessage::OpenFileFromDialog)),
             create_button(fa::FA_ICON_SAVE, "file_save",
                 app_state.file_dirty.then_some(AppMessage::SaveFile)),
+            create_button(fa::FA_ICON_GEAR, "app_configuration", Some(AppMessage::OpenAppConfigurationModal)),
             horizontal_space(),
             scale_factor_tooltip,
             window_theme_tooltip,
