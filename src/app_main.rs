@@ -114,12 +114,7 @@ impl AppMain {
                 Task::none()
             },
             AppMessage::SaveFile => {
-                Task::perform(
-                    async_save_file_to_path(
-                        self.app_state.file_path.clone(),
-                        self.app_state.file_content.text().clone(),
-                    ),
-                    AppMessage::FileSaved)
+                self.save_file()
             },
             AppMessage::FileSaved(Ok(file_name)) => {
                 self.app_state.file_path = Some(file_name);
@@ -158,6 +153,7 @@ impl AppMain {
                                                                 modifiers,
                                                                 ..
                                                             })) => {
+                let mut task = Task::none();
                 //
                 // TODO: Check Platform!
                 //
@@ -165,18 +161,19 @@ impl AppMain {
                     && !modifiers.shift()
                     && !modifiers.alt() {
                     println!("KeyPressed: {:?} {:?}", key, modifiers);
-                    match key.as_ref() {
+                    task = match key.as_ref() {
                         Character("s") => {
                             println!("SAVE!: {:?} {:?}", key, modifiers);
+                            self.save_file()
                         }
-                        _ => {}
+                        _ => Task::none()
                     }
                 }
                 //
                 // TODO: For situations where we track multi-key presses.
                 //
                 //let last_key = Some(key);
-                Task::none()
+                task
             },
             AppMessage::KeyPressedEvent(_) => {Task::none()},
             AppMessage::EventOccurred(iced::Event::Mouse(_)) => {Task::none()},
@@ -212,6 +209,15 @@ impl AppMain {
                 Task::none()
             },
         }
+    }
+
+    fn save_file(&mut self) ->Task<AppMessage> {
+        Task::perform(
+            async_save_file_to_path(
+                self.app_state.file_path.clone(),
+                self.app_state.file_content.text().clone(),
+            ),
+            AppMessage::FileSaved)
     }
 
     ///
@@ -326,7 +332,7 @@ impl AppMain {
                     container::Style {
                         background: Some(
                             iced::Color {
-                                a: 0.9,
+                                a: 0.95,
                                 ..iced::Color::BLACK
                             }
                             .into(),
