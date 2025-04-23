@@ -12,10 +12,9 @@ use iced::keyboard::{key::Named, Event::KeyPressed, Key, Modifiers};
 use iced::advanced::text::Highlight;
 use iced::application::Update;
 use iced::widget::{stack, center, horizontal_space, mouse_area, opaque, text_input, button};
-use iced::widget::{container, column, text_editor};
+use iced::widget::{container, column, row, text_editor};
 use iced::highlighter::{self, Highlighter};
 use iced::keyboard::Key::Character;
-use iced::widget::button::text;
 use iced::widget::shader::wgpu::naga::ImageQuery::Size;
 use super::app_toolbar::AppToolbar;
 use super::app_message::AppMessage;
@@ -273,7 +272,11 @@ impl AppMain {
                     iced::widget::text("Setting 1"),
                     iced::widget::text("Setting 2"),
                     iced::widget::text("Setting 3"),
-                    button(iced::widget::text("OK")).on_press(AppMessage::CloseAppConfigurationModal),
+                    row![
+                        horizontal_space(),
+                        iced::widget::button(iced::widget::text("OK"))
+                            .on_press(AppMessage::CloseAppConfigurationModal),
+                    ]
                 ]
                     .spacing(20),
             )
