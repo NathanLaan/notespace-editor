@@ -6,16 +6,10 @@
 
 use iced::Font;
 use iced::{Element, Task, Theme, Length};
-use iced::advanced::layout::padded;
 use iced::event;
-use iced::keyboard::{key::Named, Event::KeyPressed, Key, Modifiers};
-use iced::advanced::text::Highlight;
-use iced::application::Update;
-use iced::widget::{stack, center, horizontal_space, mouse_area, opaque, text_input, button};
+use iced::widget::{stack, center, horizontal_space, mouse_area, opaque};
 use iced::widget::{container, column, row, text_editor};
-use iced::highlighter::{self, Highlighter};
 use iced::keyboard::Key::Character;
-use iced::widget::shader::wgpu::naga::ImageQuery::Size;
 use super::app_toolbar::AppToolbar;
 use super::app_message::AppMessage;
 use super::app_state::AppState;
@@ -85,9 +79,7 @@ impl AppMain {
                 Task::none()
             },
             AppMessage::OpenFileFromDialog => {
-                Task::perform(
-                    async_open_file_from_dialog(),
-                    AppMessage::FileOpened)
+                self.open_file()
             },
             AppMessage::FileOpened(Ok((file_path, content))) => {
                 self.app_state.file_dirty = false;
@@ -100,16 +92,7 @@ impl AppMain {
                 Task::none()
             },
             AppMessage::NewFile => {
-                if self.app_state.file_dirty {
-                    //
-                    // TODO: Show error dialog.
-                    //
-                    println!("File Modified");
-                } else {
-                    self.app_state.file_dirty = false;
-                    self.app_state.file_path = None;
-                    self.app_state.file_content = text_editor::Content::new();
-                }
+                self.new_file();
                 Task::none()
             },
             AppMessage::SaveFile => {
@@ -140,13 +123,6 @@ impl AppMain {
                 self.app_state.scale_factor = value;
                 Task::none()
             },
-            AppMessage::KeyPressed(key, modifiers) => {
-                println!("KeyPressed: {:?} {:?}", key, modifiers);
-                //
-                //
-                //
-                Task::none()
-            },
             AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::KeyPressed {
                                                                 key,
                                                                 modifiers,
@@ -165,6 +141,13 @@ impl AppMain {
                             println!("SAVE!: {:?} {:?}", key, modifiers);
                             self.save_file()
                         }
+                        Character("o") => {
+                            self.open_file()
+                        }
+                        Character("n") => {
+                            self.new_file();
+                            Task::none()
+                        }
                         _ => Task::none()
                     }
                 }
@@ -174,7 +157,6 @@ impl AppMain {
                 //let last_key = Some(key);
                 task
             },
-            AppMessage::KeyPressedEvent(_) => {Task::none()},
             AppMessage::EventOccurred(iced::Event::Mouse(_)) => {Task::none()},
             AppMessage::EventOccurred(iced::Event::Window(_)) => {Task::none()},
             AppMessage::EventOccurred(iced::Event::Touch(_)) => {Task::none()},
@@ -210,13 +192,32 @@ impl AppMain {
         }
     }
 
-    fn save_file(&mut self) ->Task<AppMessage> {
+    fn save_file(&mut self) -> Task<AppMessage> {
         Task::perform(
             async_save_file_to_path(
                 self.app_state.file_path.clone(),
                 self.app_state.file_content.text().clone(),
             ),
             AppMessage::FileSaved)
+    }
+
+    fn open_file(&mut self) -> Task<AppMessage> {
+        Task::perform(
+            async_open_file_from_dialog(),
+            AppMessage::FileOpened)
+    }
+
+    fn new_file(&mut self) {
+        if self.app_state.file_dirty {
+            //
+            // TODO: Show error dialog.
+            //
+            println!("File Modified");
+        } else {
+            self.app_state.file_dirty = false;
+            self.app_state.file_path = None;
+            self.app_state.file_content = text_editor::Content::new();
+        }
     }
 
     ///

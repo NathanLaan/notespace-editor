@@ -15,23 +15,25 @@ use super::app_const::{UI_TOOLTIP_RADIUS};
 ///
 /// Allows an `iced::widget::Container` to have a colored background.
 ///
-pub struct AppStyle {
-    pub color: Color,
-}
+pub struct AppStyle;
 
 impl AppStyle {
-    //type Style = Theme;
 
-    fn appearance(&self, _style: &container::Style) -> container::Style {
-        container::Style {
-            background: Some(self.color.into()),
+
+    pub(crate) fn _color_container(color: Color, theme: &Theme) -> Style {
+        let palette = theme.extended_palette();
+        Style {
+            background: Some(color.into()),
             border: Border::default(),
-            text_color: None,
+            text_color: palette.primary.base.color.into(),
             shadow: Default::default(),
         }
     }
 
 
+    ///
+    /// Style for a tooltip, based on the `theme`.
+    ///
     pub(crate) fn tooltip_style(theme: &Theme) -> Style {
         let palette = theme.extended_palette();
         Style {
@@ -40,7 +42,10 @@ impl AppStyle {
             ..Style::default()
         }
     }
-    
+
+    ///
+    /// Style for a toolbar, based on the `theme`.
+    ///
     pub(crate) fn toolbar_theme(theme: &Theme) -> Style {
         let palette = theme.extended_palette();
         Style {
