@@ -1113,9 +1113,9 @@ dependencies = [
 
 [[package]]
 name = "fa-iced"
-version = "0.2.0"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bd0c1265f5796976e1d02a0d5868b32e28b6c9751c8ae3ef90cc7454290d0123"
+checksum = "3d44f46d14c08d866985c214eb3dd6d94bd4329e18f8da8b09d87c633aefbd09"
 dependencies = [
  "iced",
 ]

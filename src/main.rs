@@ -15,7 +15,7 @@ mod app_style;
 mod app_configuration;
 
 use app_main::AppMain;
-use fa_iced::load_font_fontawesome;
+use fa_iced::load_font_fontawesome_ttf;
 extern crate rust_i18n;
 
 //
@@ -27,7 +27,7 @@ fn main() -> iced::Result {
     //
     // Load the Font Awesome fonts.
     //
-    load_font_fontawesome();
+    load_font_fontawesome_ttf();
 
     //
     // TODO: Load app configuration here to get window size and location

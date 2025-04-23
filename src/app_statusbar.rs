@@ -9,7 +9,7 @@ use std::path::Path;
 use iced::{widget::{horizontal_space, text, Text, row}, Element, Font, Renderer, Theme};
 use super::app_message::AppMessage;
 use super::app_state::AppState;
-use crate::app_const::{UI_CONTROL_PADDING, UI_CONTROL_SPACING, UI_STATUSBAR_TEXT_SIZE};
+use crate::app_const::{UI_CONTROL_PADDING, UI_CONTROL_SPACING, UI_STATUSBAR_TEXT_SIZE, UI_TOOLBAR_ICON_SIZE};
 use fa_iced as fa;
 
 pub struct AppStatusbar;
@@ -71,8 +71,8 @@ impl AppStatusbar {
 }
 
 fn iced_text_icon_circle_check<'a, Message>() -> Element<'a, Message> {
-    fa::iced_text_icon(fa::FA_ICON_CIRCLE_CHECK)
+    fa::iced_text_icon_regular(fa::FA_ICON_CIRCLE_CHECK, UI_TOOLBAR_ICON_SIZE)
 }
 fn iced_text_icon_circle_xmark<'a, Message>() -> Element<'a, Message> {
-    fa::iced_text_icon(fa::FA_ICON_CIRCLE_XMARK)
+    fa::iced_text_icon_regular(fa::FA_ICON_CIRCLE_XMARK, UI_TOOLBAR_ICON_SIZE)
 }
