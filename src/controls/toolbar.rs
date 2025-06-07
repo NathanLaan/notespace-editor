@@ -4,10 +4,10 @@
 //! Toolbar for main app window.
 //!
 
-use super::app_const::{UI_CONTROL_PADDING, UI_CONTROL_SPACING, UI_TOOLBAR_BUTTON_SIZE, UI_TOOLBAR_ICON_SIZE, UI_TOOLTIP_PADDING};
-use super::app_message::AppMessage;
-use super::app_state::AppState;
-use super::app_style::AppStyle;
+use crate::app_const::{UI_CONTROL_PADDING, UI_CONTROL_SPACING, UI_TOOLBAR_BUTTON_SIZE, UI_TOOLBAR_ICON_SIZE, UI_TOOLTIP_PADDING};
+use crate::app_message::AppMessage;
+use crate::app_state::AppState;
+use crate::app_style::AppStyle;
 use fa_iced as fa;
 use iced::widget::{text, PickList};
 use iced::widget::tooltip::Position;

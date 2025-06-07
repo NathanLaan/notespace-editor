@@ -7,8 +7,8 @@
 use std::fmt::format;
 use std::path::Path;
 use iced::{widget::{horizontal_space, text, Text, row}, Element, Font, Renderer, Theme};
-use super::app_message::AppMessage;
-use super::app_state::AppState;
+use crate::app_message::AppMessage;
+use crate::app_state::AppState;
 use crate::app_const::{UI_CONTROL_PADDING, UI_CONTROL_SPACING, UI_STATUSBAR_TEXT_SIZE, UI_TOOLBAR_ICON_SIZE};
 use fa_iced as fa;
 

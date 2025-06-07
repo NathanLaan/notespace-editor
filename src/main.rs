@@ -4,18 +4,17 @@
 //! The `main()` function.
 //!
 
-mod app_main;
+mod main_window;
 mod app_const;
 mod app_message;
 mod app_state;
-mod app_statusbar;
 mod app_io;
-mod app_toolbar;
 mod app_style;
 mod app_configuration;
 mod keyboard;
+mod controls;
 
-use app_main::AppMain;
+use main_window::AppMain;
 use fa_iced::load_font_fontawesome_ttf;
 extern crate rust_i18n;
 
