@@ -16,3 +16,9 @@ fa-iced = "0.4.1"
 toml = "0.8"
 dirs = "4.0.0"
 serde = { version = "1.0.219", features = ["derive"] }
+lazy_static = "1.5.0"
+libutil = "0.1.0"
+# The time crate is required by the libutil crate.
+# It's used by the dbg_println() macro.
+# This is probably a bug in the libutil crate...
+time = "0.3.41"

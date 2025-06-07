@@ -2148,6 +2148,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "libutil"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "acd1bb747ab6589f5b471e640ba58247dca6c110972b9cf8e81b5a2ad8df126e"
+dependencies = [
+ "time",
+]
+
+[[package]]
 name = "linked-hash-map"
 version = "0.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2398,9 +2407,12 @@ dependencies = [
  "fa-iced",
  "iced",
  "iced_aw",
+ "lazy_static",
+ "libutil",
  "rfd",
  "rust-i18n",
  "serde",
+ "time",
  "tokio",
  "toml",
 ]
@@ -2460,6 +2472,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.100",
+]
+
+[[package]]
+name = "num_threads"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5c7398b9c8b70908f6371f47ed36737907c87c52af34c268fed0bf0ceb92ead9"
+dependencies = [
+ "libc",
 ]
 
 [[package]]
@@ -3867,7 +3888,9 @@ checksum = "8a7619e19bc266e0f9c5e6686659d394bc57973859340060a69221e57dbc0c40"
 dependencies = [
  "deranged",
  "itoa",
+ "libc",
  "num-conv",
+ "num_threads",
  "powerfmt",
  "serde",
  "time-core",

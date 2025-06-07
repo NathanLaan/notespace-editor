@@ -13,6 +13,7 @@ mod app_io;
 mod app_toolbar;
 mod app_style;
 mod app_configuration;
+mod keyboard;
 
 use app_main::AppMain;
 use fa_iced::load_font_fontawesome_ttf;

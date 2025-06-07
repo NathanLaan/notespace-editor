@@ -11,6 +11,7 @@ use iced::Theme;
 use iced::widget::text_editor::Content;
 use iced::font::Font;
 use crate::app_io::AppIOError;
+use crate::keyboard::keybind_manager::KeybindManager;
 
 pub struct AppState {
     pub(crate) scale_factor: f64,
@@ -22,6 +23,7 @@ pub struct AppState {
     pub(crate) error: Option<AppIOError>,
     pub(crate) font_monospaced: Option<Font>,
     pub(crate) app_configuration_changed:bool,
+    pub(crate) keybind_manager: KeybindManager,
 }
 
 impl Default for AppState {
@@ -36,6 +38,7 @@ impl Default for AppState {
             error: None,
             font_monospaced: None,
             app_configuration_changed: false,
+            keybind_manager: KeybindManager::default(),
         }
     }
 }
