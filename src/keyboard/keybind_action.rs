@@ -8,6 +8,7 @@ pub enum KeybindAction {
     CopyText,
     PasteText,
     NewFile,
+    OpenFile,
     SaveFile,
     CloseFile,
     ShowSettings,

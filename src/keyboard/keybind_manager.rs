@@ -33,6 +33,10 @@ impl Default for KeybindManager {
             KeybindAction::NewFile,
         );
         bindings.insert(
+            (Modifiers::CTRL, iced::keyboard::key::Code::KeyO),
+            KeybindAction::OpenFile,
+        );
+        bindings.insert(
             (Modifiers::CTRL, iced::keyboard::key::Code::KeyS),
             KeybindAction::SaveFile,
         );

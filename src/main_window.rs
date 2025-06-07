@@ -4,7 +4,7 @@
 //! The Iced `Application` implementation.
 //!
 
-use iced::Font;
+use iced::{Font, Subscription};
 use iced::{Element, Task, Theme, Length};
 use iced::event;
 use iced::widget::{stack, center, horizontal_space, mouse_area, opaque};
@@ -17,6 +17,7 @@ use crate::controls::statusbar::AppStatusbar;
 use super::app_configuration::AppConfiguration;
 use super::app_io::{async_open_file_from_dialog, async_save_file_to_path};
 use rust_i18n::t;
+use crate::keyboard::keybind_action::KeybindAction;
 
 ///
 /// The top-level Iced Application component.
@@ -128,34 +129,35 @@ impl AppMain {
                                                                 modifiers,
                                                                 ..
                                                             })) => {
-                let mut task = Task::none();
-                //
-                // TODO: Check Platform!
-                //
-                if (modifiers.control() || modifiers.command())
-                    && !modifiers.shift()
-                    && !modifiers.alt() {
-                    println!("KeyPressed: {:?} {:?}", key, modifiers);
-                    task = match key.as_ref() {
-                        Character("s") => {
-                            println!("SAVE!: {:?} {:?}", key, modifiers);
-                            self.save_file()
+                match self
+                    .app_state
+                    .keybind_manager
+                    .get_app_action(&key, modifiers)
+                {
+                    Some(app_action) => match app_action {
+                        KeybindAction::ShowSettings => {
+                            //self.app_state.current_view = MainWindowView::Settings;
                         }
-                        Character("o") => {
-                            self.open_file()
+                        KeybindAction::QuitApplication => {
+                            self.quit();
                         }
-                        Character("n") => {
+                        KeybindAction::CutText => {}
+                        KeybindAction::CopyText => {}
+                        KeybindAction::PasteText => {}
+                        KeybindAction::NewFile => {
                             self.new_file();
-                            Task::none()
                         }
-                        _ => Task::none()
-                    }
+                        KeybindAction::OpenFile => {
+                            self.open_file();
+                        }
+                        KeybindAction::SaveFile => {
+                            self.save_file();
+                        }
+                        KeybindAction::CloseFile => {}
+                    },
+                    None => {}
                 }
-                //
-                // TODO: For situations where we track multi-key presses.
-                //
-                //let last_key = Some(key);
-                task
+                Task::none()
             },
             AppMessage::EventOccurred(iced::Event::Mouse(_)) => {Task::none()},
             AppMessage::EventOccurred(iced::Event::Window(_)) => {Task::none()},
@@ -311,11 +313,20 @@ impl AppMain {
     /// Iced function to handle subscriptions (async events).
     ///
     pub(crate) fn subscription(&self) -> iced::Subscription<AppMessage> {
-        event::listen().map(AppMessage::EventOccurred)
         // iced::window::Event::subscription().map(|event| match event {
         //     iced::window::Event::Resized { width, height } => AppMessage::WindowResized(width, height),
         //     _ => AppMessage::NoOp,
         // })
+        let mut subscriptions = Vec::new();
+        subscriptions.push(iced::event::listen().map(AppMessage::EventOccurred));
+        Subscription::batch(subscriptions)
+    }
+
+    ///
+    /// Exit the application process.
+    ///
+    fn quit(&self) {
+        std::process::exit(0);
     }
 
     ///
