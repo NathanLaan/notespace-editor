@@ -46,7 +46,7 @@ pub async fn async_open_file_from_dialog() -> Result<(PathBuf, Arc<String>), App
 pub async fn async_save_file_to_path(
     file_path: Option<PathBuf>,
     file_contents: String,
-) -> Result<(PathBuf), AppIOError> {
+) -> Result<PathBuf, AppIOError> {
     let path = if let Some(file_path) = file_path {
         file_path
     } else {

@@ -128,6 +128,7 @@ impl AppMain {
                     Some(app_action) => match app_action {
                         KeybindAction::ShowSettings => {
                             //self.app_state.current_view = MainWindowView::Settings;
+                            self.show_app_configuration_modal = true;
                         }
                         KeybindAction::QuitApplication => {
                             self.quit();
@@ -139,10 +140,10 @@ impl AppMain {
                             self.new_file();
                         }
                         KeybindAction::OpenFile => {
-                            self.open_file();
+                            return self.open_file();
                         }
                         KeybindAction::SaveFile => {
-                            self.save_file();
+                            return self.save_file();
                         }
                         KeybindAction::CloseFile => {}
                     },
