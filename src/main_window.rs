@@ -4,20 +4,20 @@
 //! The Iced `Application` implementation.
 //!
 
-use iced::{Font, Subscription};
-use iced::{Element, Task, Theme, Length};
-use iced::event;
-use iced::widget::{stack, center, horizontal_space, mouse_area, opaque};
-use iced::widget::{container, column, row, text_editor};
-use iced::keyboard::Key::Character;
-use crate::controls::toolbar::AppToolbar;
+use super::app_configuration::AppConfiguration;
+use super::app_io::{async_open_file_from_dialog, async_save_file_to_path};
 use super::app_message::AppMessage;
 use super::app_state::AppState;
 use crate::controls::statusbar::AppStatusbar;
-use super::app_configuration::AppConfiguration;
-use super::app_io::{async_open_file_from_dialog, async_save_file_to_path};
-use rust_i18n::t;
+use crate::controls::toolbar::AppToolbar;
 use crate::keyboard::keybind_action::KeybindAction;
+use iced::event;
+use iced::keyboard::Key::Character;
+use iced::widget::{center, horizontal_space, mouse_area, opaque, stack};
+use iced::widget::{column, container, row, text_editor};
+use iced::{Element, Length, Task, Theme};
+use iced::{Font, Subscription};
+use rust_i18n::t;
 
 ///
 /// The top-level Iced Application component.
@@ -61,10 +61,7 @@ impl AppMain {
     ///
     pub fn new() -> (Self, Task<AppMessage>) {
         let app = AppMain::default();
-        (
-            app,
-            Task::none(),
-        )
+        (app, Task::none())
     }
 
     ///
@@ -78,57 +75,51 @@ impl AppMain {
                 self.app_state.file_dirty = self.app_state.file_dirty || action.is_edit();
                 self.app_state.file_content.perform(action);
                 Task::none()
-            },
-            AppMessage::OpenFileFromDialog => {
-                self.open_file()
-            },
+            }
+            AppMessage::OpenFileFromDialog => self.open_file(),
             AppMessage::FileOpened(Ok((file_path, content))) => {
                 self.app_state.file_dirty = false;
                 self.app_state.file_path = Some(file_path);
                 self.app_state.file_content = text_editor::Content::with_text(content.as_ref());
                 Task::none()
-            },
+            }
             AppMessage::FileOpened(Err(error)) => {
                 self.app_state.error = Some(error);
                 Task::none()
-            },
+            }
             AppMessage::NewFile => {
                 self.new_file();
                 Task::none()
-            },
-            AppMessage::SaveFile => {
-                self.save_file()
-            },
+            }
+            AppMessage::SaveFile => self.save_file(),
             AppMessage::FileSaved(Ok(file_name)) => {
                 self.app_state.file_path = Some(file_name);
                 self.app_state.file_dirty = false;
                 Task::none()
-            },
+            }
             AppMessage::FileSaved(Err(error)) => {
                 self.app_state.error = Some(error);
                 Task::none()
-            },
+            }
             AppMessage::UpdateLanguage(str) => {
                 rust_i18n::set_locale(str.as_ref());
                 Task::none()
-            },
+            }
             AppMessage::UpdateWindowTheme(theme) => {
                 self.app_state.window_theme = theme;
                 Task::none()
-            },
+            }
             AppMessage::UpdateSyntaxTheme(theme) => {
                 self.app_state.syntax_theme = theme;
                 Task::none()
-            },
+            }
             AppMessage::UpdateScale(value) => {
                 self.app_state.scale_factor = value;
                 Task::none()
-            },
-            AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::KeyPressed {
-                                                                key,
-                                                                modifiers,
-                                                                ..
-                                                            })) => {
+            }
+            AppMessage::EventOccurred(iced::Event::Keyboard(
+                iced::keyboard::Event::KeyPressed { key, modifiers, .. },
+            )) => {
                 match self
                     .app_state
                     .keybind_manager
@@ -158,39 +149,39 @@ impl AppMain {
                     None => {}
                 }
                 Task::none()
-            },
-            AppMessage::EventOccurred(iced::Event::Mouse(_)) => {Task::none()},
-            AppMessage::EventOccurred(iced::Event::Window(_)) => {Task::none()},
-            AppMessage::EventOccurred(iced::Event::Touch(_)) => {Task::none()},
-            AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::ModifiersChanged(_))) => {Task::none()},
-            AppMessage::EventOccurred(iced::Event::Keyboard(iced::keyboard::Event::KeyReleased { .. })) => {Task::none()},
+            }
+            AppMessage::EventOccurred(iced::Event::Mouse(_)) => Task::none(),
+            AppMessage::EventOccurred(iced::Event::Window(_)) => Task::none(),
+            AppMessage::EventOccurred(iced::Event::Touch(_)) => Task::none(),
+            AppMessage::EventOccurred(iced::Event::Keyboard(
+                iced::keyboard::Event::ModifiersChanged(_),
+            )) => Task::none(),
+            AppMessage::EventOccurred(iced::Event::Keyboard(
+                iced::keyboard::Event::KeyReleased { .. },
+            )) => Task::none(),
             AppMessage::WindowResized(w, h) => {
                 self.app_configuration.window_w = w;
                 self.app_configuration.window_h = h;
                 self.app_configuration.save();
                 Task::none()
-            },
+            }
             AppMessage::SaveAppConfiguration => {
                 if self.app_state.app_configuration_changed {
                     self.app_configuration.save();
                     self.app_state.app_configuration_changed = false;
                 }
                 Task::none()
-            },
-            AppMessage::TabPressed => {
-                Task::none()
-            },
-            AppMessage::FocusChanged(id) => {
-                Task::none()
-            },
+            }
+            AppMessage::TabPressed => Task::none(),
+            AppMessage::FocusChanged(id) => Task::none(),
             AppMessage::OpenAppConfigurationModal => {
                 self.show_app_configuration_modal = true;
                 Task::none()
-            },
+            }
             AppMessage::CloseAppConfigurationModal => {
                 self.show_app_configuration_modal = false;
                 Task::none()
-            },
+            }
         }
     }
 
@@ -200,13 +191,12 @@ impl AppMain {
                 self.app_state.file_path.clone(),
                 self.app_state.file_content.text().clone(),
             ),
-            AppMessage::FileSaved)
+            AppMessage::FileSaved,
+        )
     }
 
     fn open_file(&mut self) -> Task<AppMessage> {
-        Task::perform(
-            async_open_file_from_dialog(),
-            AppMessage::FileOpened)
+        Task::perform(async_open_file_from_dialog(), AppMessage::FileOpened)
     }
 
     fn new_file(&mut self) {
@@ -232,7 +222,10 @@ impl AppMain {
     pub(crate) fn window(&self) -> iced::window::Settings {
         println!("AppMain::window()");
         iced::window::Settings {
-            size: iced::Size::new(self.app_configuration.window_w, self.app_configuration.window_h),
+            size: iced::Size::new(
+                self.app_configuration.window_w,
+                self.app_configuration.window_h,
+            ),
             ..iced::window::Settings::default()
         }
     }
@@ -241,10 +234,11 @@ impl AppMain {
     /// Iced function to render the view.
     ///
     pub(crate) fn view(&self) -> Element<'_, AppMessage> {
-        let file_extension = self.app_state
+        let file_extension = self
+            .app_state
             .file_path
             .as_ref()
-            .and_then(|path|path.extension()?.to_str())
+            .and_then(|path| path.extension()?.to_str())
             .unwrap_or("md") // TODO: App config setting for default file extension.
             .to_string();
         let editor = text_editor(&self.app_state.file_content)
@@ -266,7 +260,7 @@ impl AppMain {
             scrollable_container,
             self.statusbar.view(&self.app_state),
         ])
-            .padding(0);
+        .padding(0);
 
         if self.show_app_configuration_modal {
             let modal_contents = container(
@@ -281,15 +275,17 @@ impl AppMain {
                             .on_press(AppMessage::CloseAppConfigurationModal),
                     ]
                 ]
-                    .spacing(20),
+                .spacing(20),
             )
-                .width(600)
-                .padding(10)
-                .style(container::rounded_box);
+            .width(600)
+            .padding(10)
+            .style(container::rounded_box);
 
-            AppMain::modal(base_contents,
-                           modal_contents,
-                           AppMessage::CloseAppConfigurationModal)
+            AppMain::modal(
+                base_contents,
+                modal_contents,
+                AppMessage::CloseAppConfigurationModal,
+            )
         } else {
             base_contents.into()
         }
@@ -358,7 +354,6 @@ impl AppMain {
                 .on_press(on_press_event)
             )
         ]
-            .into()
+        .into()
     }
-
 }

@@ -4,9 +4,9 @@
 //! User configuration settings.
 //!
 
+use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
-use serde::{Serialize, Deserialize};
 
 ///
 /// User configuration settings.

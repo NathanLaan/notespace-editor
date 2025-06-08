@@ -4,20 +4,20 @@
 //! The `main()` function.
 //!
 
-mod main_window;
+mod app_configuration;
 mod app_const;
+mod app_io;
 mod app_message;
 mod app_state;
-mod app_io;
-mod app_configuration;
-mod keyboard;
 mod controls;
-mod ui_util;
+mod keyboard;
+mod main_window;
 mod ui_const;
 mod ui_style;
+mod ui_util;
 
-use main_window::AppMain;
 use fa_iced::load_font_fontawesome_ttf;
+use main_window::AppMain;
 extern crate rust_i18n;
 
 //
@@ -39,7 +39,7 @@ fn main() -> iced::Result {
     // Initialize and run the app.
     //
     let mut window_settings = iced::window::Settings::default();
-    window_settings.size = iced::Size::new(1200.0,1024.0);
+    window_settings.size = iced::Size::new(1200.0, 1024.0);
     iced::application(AppMain::title, AppMain::update, AppMain::view)
         .subscription(AppMain::subscription)
         .window(window_settings)

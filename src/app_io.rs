@@ -5,25 +5,27 @@
 //!
 
 use rfd::*;
-use std::io::ErrorKind;
-use std::path::{PathBuf};
-use std::sync::Arc;
-use std::result::Result;
 use rust_i18n::t;
+use std::io::ErrorKind;
+use std::path::PathBuf;
+use std::result::Result;
+use std::sync::Arc;
 
 ///
 /// Load the specified `path` into a `String`.
 ///
 /// Uses Tokio async IO functions.
 ///
-pub async fn async_open_file_from_path(file_path: PathBuf) -> Result<(PathBuf,Arc<String>), AppIOError> {
+pub async fn async_open_file_from_path(
+    file_path: PathBuf,
+) -> Result<(PathBuf, Arc<String>), AppIOError> {
     let file_contents = tokio::fs::read_to_string(&file_path)
         .await
         .map(Arc::new)
         .map_err(|error| error.kind())
         .map_err(AppIOError::IOFailedError)?;
 
-    Ok((file_path,file_contents))
+    Ok((file_path, file_contents))
 }
 
 ///
@@ -41,7 +43,10 @@ pub async fn async_open_file_from_dialog() -> Result<(PathBuf, Arc<String>), App
     async_open_file_from_path(file_path.to_owned()).await
 }
 
-pub async fn async_save_file_to_path(file_path: Option<PathBuf>, file_contents: String) -> Result<(PathBuf), AppIOError> {
+pub async fn async_save_file_to_path(
+    file_path: Option<PathBuf>,
+    file_contents: String,
+) -> Result<(PathBuf), AppIOError> {
     let path = if let Some(file_path) = file_path {
         file_path
     } else {
@@ -72,10 +77,10 @@ pub enum AppIOError {
 impl std::fmt::Display for AppIOError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            AppIOError::FileDialogClosedError =>
-                write!(f, "AppIOError {}", "FileDialogClosedError"),
-            AppIOError::IOFailedError(err) =>
-                write!(f, "AppIOError {}", err),
+            AppIOError::FileDialogClosedError => {
+                write!(f, "AppIOError {}", "FileDialogClosedError")
+            }
+            AppIOError::IOFailedError(err) => write!(f, "AppIOError {}", err),
         }
     }
 }

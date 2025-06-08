@@ -4,17 +4,23 @@
 //! Toolbar for main app window.
 //!
 
-use crate::app_const::{UI_CONTROL_PADDING, UI_CONTROL_SPACING, UI_TOOLBAR_BUTTON_SIZE, UI_TOOLBAR_ICON_SIZE, UI_TOOLTIP_PADDING};
+use crate::app_const::{
+    UI_CONTROL_PADDING, UI_CONTROL_SPACING, UI_TOOLBAR_BUTTON_SIZE, UI_TOOLBAR_ICON_SIZE,
+    UI_TOOLTIP_PADDING,
+};
 use crate::app_message::AppMessage;
 use crate::app_state::AppState;
-use crate::ui_style::AppStyle;
-use fa_iced as fa;
-use iced::widget::{text, PickList};
-use iced::widget::tooltip::Position;
-use iced::{Element, Length, Theme, border, widget::{Container, button, container, horizontal_space, row, tooltip}, Font};
-use rust_i18n::t;
 use crate::keyboard::keybind_action::KeybindAction;
+use crate::ui_style::AppStyle;
 use crate::ui_util::create_toolbar_button_small;
+use fa_iced as fa;
+use iced::widget::tooltip::Position;
+use iced::widget::{PickList, text};
+use iced::{
+    Element, Font, Length, Theme, border,
+    widget::{Container, button, container, horizontal_space, row, tooltip},
+};
+use rust_i18n::t;
 
 pub struct AppToolbar;
 

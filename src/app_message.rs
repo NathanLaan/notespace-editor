@@ -4,10 +4,10 @@
 //! Iced application messages.
 //!
 
+use crate::app_io::AppIOError;
+use iced::widget::text_editor;
 use std::path::PathBuf;
 use std::sync::Arc;
-use iced::widget::text_editor;
-use crate::app_io::AppIOError;
 
 #[derive(Debug, Clone)]
 pub enum AppMessage {
