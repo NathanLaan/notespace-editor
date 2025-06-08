@@ -9,10 +9,12 @@ mod app_const;
 mod app_message;
 mod app_state;
 mod app_io;
-mod app_style;
 mod app_configuration;
 mod keyboard;
 mod controls;
+mod ui_util;
+mod ui_const;
+mod ui_style;
 
 use main_window::AppMain;
 use fa_iced::load_font_fontawesome_ttf;

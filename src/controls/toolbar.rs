@@ -7,7 +7,7 @@
 use crate::app_const::{UI_CONTROL_PADDING, UI_CONTROL_SPACING, UI_TOOLBAR_BUTTON_SIZE, UI_TOOLBAR_ICON_SIZE, UI_TOOLTIP_PADDING};
 use crate::app_message::AppMessage;
 use crate::app_state::AppState;
-use crate::app_style::AppStyle;
+use crate::ui_style::AppStyle;
 use fa_iced as fa;
 use iced::widget::{text, PickList};
 use iced::widget::tooltip::Position;
@@ -32,7 +32,7 @@ impl AppToolbar {
             iced::widget::Text::new(scale_factor_tooltip_text),
             Position::FollowCursor,
         )
-        .style(AppStyle::tooltip_style);
+        .style(AppStyle::style_tooltip);
 
         let window_theme_picker = PickList::new(
             &Theme::ALL[..],
@@ -45,7 +45,7 @@ impl AppToolbar {
             iced::widget::Text::new(window_theme_tooltip_text),
             Position::FollowCursor,
         )
-        .style(AppStyle::tooltip_style);
+        .style(AppStyle::style_tooltip);
 
         let syntax_theme_picker = PickList::new(
             &iced::highlighter::Theme::ALL[..],
@@ -58,7 +58,7 @@ impl AppToolbar {
             iced::widget::Text::new(syntax_theme_tooltip_text),
             Position::FollowCursor,
         )
-        .style(AppStyle::tooltip_style);
+        .style(AppStyle::style_tooltip);
 
         let locale_list: Vec<String> = rust_i18n::available_locales!()
             .into_iter()
@@ -75,7 +75,7 @@ impl AppToolbar {
             iced::widget::Text::new(locale_tooltip_text),
             Position::FollowCursor,
         )
-        .style(AppStyle::tooltip_style);
+        .style(AppStyle::style_tooltip);
 
         let row = row![
             create_button(fa::FA_ICON_NEW, "file_new", Some(AppMessage::NewFile)),
@@ -109,7 +109,7 @@ impl AppToolbar {
             // TODO: Need to figure out iced 0.13 style.
             //
             //.style(iced::theme::Theme::Custom(Box::new(ColoredBackground(Color::from_rgb(0.5, 0.5, 0.5)))))
-            .style(AppStyle::toolbar_theme)
+            .style(AppStyle::style_toolbar)
             .width(Length::Fill)
             .height(Length::Shrink)
             .into()
@@ -138,6 +138,6 @@ fn create_button<'a, Message: Clone + 'a>(
         iced::widget::Text::new(locale_tooltip_text),
         Position::FollowCursor,
     )
-    .style(AppStyle::tooltip_style)
+    .style(AppStyle::style_tooltip)
     .into()
 }
