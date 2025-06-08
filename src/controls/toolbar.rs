@@ -13,6 +13,8 @@ use iced::widget::{text, PickList};
 use iced::widget::tooltip::Position;
 use iced::{Element, Length, Theme, border, widget::{Container, button, container, horizontal_space, row, tooltip}, Font};
 use rust_i18n::t;
+use crate::keyboard::keybind_action::KeybindAction;
+use crate::ui_util::create_toolbar_button_small;
 
 pub struct AppToolbar;
 
@@ -78,21 +80,45 @@ impl AppToolbar {
         .style(AppStyle::style_tooltip);
 
         let row = row![
-            create_button(fa::FA_ICON_NEW, "file_new", Some(AppMessage::NewFile)),
-            create_button(
+            create_toolbar_button_small(
+                fa::FA_ICON_NEW,
+                "file_new",
+                Some(AppMessage::NewFile),
+                true,
+                KeybindAction::NewFile,
+                &app_state,
+            ),
+            create_toolbar_button_small(
                 fa::FA_ICON_OPEN,
                 "file_open",
-                Some(AppMessage::OpenFileFromDialog)
+                Some(AppMessage::OpenFileFromDialog),
+                true,
+                KeybindAction::OpenFile,
+                &app_state,
             ),
-            create_button(
+            create_toolbar_button_small(
                 fa::FA_ICON_SAVE,
                 "file_save",
-                app_state.file_dirty.then_some(AppMessage::SaveFile)
+                app_state.file_dirty.then_some(AppMessage::SaveFile),
+                true,
+                KeybindAction::SaveFile,
+                &app_state,
             ),
-            create_button(
+            create_toolbar_button_small(
                 fa::FA_ICON_GEAR,
                 "app_configuration",
-                Some(AppMessage::OpenAppConfigurationModal)
+                Some(AppMessage::OpenAppConfigurationModal),
+                true,
+                KeybindAction::ShowSettings,
+                &app_state,
+            ),
+            create_toolbar_button_small(
+                fa::FA_ICON_INFO,
+                "app_information",
+                Some(AppMessage::OpenAppConfigurationModal),
+                true,
+                KeybindAction::ShowSettings,
+                &app_state,
             ),
             horizontal_space(),
             scale_factor_tooltip,

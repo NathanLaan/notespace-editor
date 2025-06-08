@@ -44,7 +44,7 @@ pub const UI_TOOLBAR_ICON_FONT_SIZE_LARGE: u16 = 32;
 ///
 /// The size of toolbar buttons.
 ///
-pub const UI_TOOLBAR_BUTTON_HEIGHT_SMALL: u16 = 30;
+pub const UI_TOOLBAR_BUTTON_HEIGHT_SMALL: u16 = 20;
 
 ///
 /// The size of toolbar button icons.

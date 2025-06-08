@@ -7,6 +7,7 @@ use iced::{Element, Length};
 use crate::ui_const::UI_TOOLBAR_BUTTON_HEIGHT_SMALL;
 use crate::ui_style::AppStyle;
 use rust_i18n::t;
+use crate::app_const::UI_TOOLBAR_ICON_SIZE;
 
 ///
 /// Create a button with the specified icon, tooltip text, and message handler.
@@ -23,7 +24,7 @@ pub(crate) fn create_toolbar_button_small<'a, Message: Clone + 'a>(
         .keybind_manager
         .get_display_text_for_action(keybind_action);
     let btn = button(
-        container(fa::iced_text_icon_solid(icon_key, 18))
+        container(fa::iced_text_icon_solid(icon_key, UI_TOOLBAR_ICON_SIZE))
             .center_x(Length::Fill)
             .center_y(Length::Fill)
             .width(UI_TOOLBAR_BUTTON_HEIGHT_SMALL)

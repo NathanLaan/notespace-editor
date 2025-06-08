@@ -54,3 +54,8 @@ app_configuration:
   en: "Settings"
   de: "Einstellungen"
   fr: "Paramètres"
+
+app_information:
+  en: "About"
+  de: "Um"
+  fr: "Information"
