@@ -4,7 +4,11 @@ A basic text editor implemented in Rust using the [Iced](https://iced.rs/) GUI l
 
 # TODO
 
-- Shortcut keys.
+- Dialog to confirm exit when there are unsaved changes.
+- Shortcut keys support.
+- Refactor shortcut keys to use AppMessage.
+- Refactor to use View model in AppState.
+- Refactor AppMessage to align with View model.
 - Copy, Cut, Paste.
 - Control and text alignment in statusbar.
 - Support Tab key to move between controls.
