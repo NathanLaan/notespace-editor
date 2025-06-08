@@ -14,6 +14,10 @@ A basic text editor implemented in Rust using the [Iced](https://iced.rs/) GUI l
 - Settings screen/view in dialog or main window area.
 - Configurable keyboard shortcuts.
 - Keyboard shortcuts in toolbar tooltips.
+- Project-style sidebar with files.
+- File change monitor (as iced subscription?).
+- Git integration.
+- Git as syncing mechanism.
 
 ## References
 
