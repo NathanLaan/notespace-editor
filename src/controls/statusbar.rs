@@ -4,17 +4,16 @@
 //! Statusbar for main app window.
 //!
 
-use crate::app_const::{
-    UI_CONTROL_PADDING, UI_CONTROL_SPACING, UI_STATUSBAR_TEXT_SIZE, UI_TOOLBAR_ICON_SIZE,
-};
 use crate::app_message::AppMessage;
 use crate::app_state::AppState;
+use crate::ui_const::{
+    UI_CONTROL_PADDING, UI_CONTROL_SPACING, UI_STATUSBAR_TEXT_SIZE, UI_TOOLBAR_ICON_SIZE,
+};
 use fa_iced as fa;
 use iced::{
     Element, Font, Renderer, Theme,
     widget::{Text, horizontal_space, row, text},
 };
-use std::fmt::format;
 use std::path::Path;
 
 pub struct AppStatusbar;

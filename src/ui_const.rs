@@ -14,16 +14,6 @@ macro_rules! arc_mutex {
     };
 }
 
-///
-/// Horizontal spacing for controls.
-///
-pub const UI_CONTROL_SPACING: u16 = 5;
-
-///
-/// Spacing around controls.
-///
-pub const UI_CONTROL_PADDING: u16 = 5;
-
 pub const UR_LEFT_SIDEBAR_PADDING: iced::Padding = iced::Padding {
     top: 0.0,
     bottom: 5.0,
@@ -65,3 +55,28 @@ pub const UI_USER_INFO_FONT_SIZE: u16 = 16;
 pub(crate) const UI_COL_WIDTH_USERNAME: u16 = 3;
 pub(crate) const UI_COL_WIDTH_PASSWORD: u16 = 2;
 pub(crate) const UI_COL_WIDTH_SMARTCARD: u16 = 7;
+
+///
+/// Horizontal spacing for controls.
+///
+pub(crate) const UI_CONTROL_SPACING: u16 = 5;
+
+///
+/// Spacing around controls.
+///
+pub(crate) const UI_CONTROL_PADDING: u16 = 5;
+
+///
+/// The size of text in the statusbar.
+///
+pub(crate) const UI_STATUSBAR_TEXT_SIZE: u16 = 12;
+
+///
+/// The size of toolbar buttons.
+///
+pub(crate) const UI_TOOLBAR_BUTTON_SIZE: u16 = 30;
+
+///
+/// The size of toolbar button icons.
+///
+pub(crate) const UI_TOOLBAR_ICON_SIZE: u16 = 16;

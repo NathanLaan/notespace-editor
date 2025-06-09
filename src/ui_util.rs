@@ -1,11 +1,13 @@
-use crate::app_const::UI_TOOLBAR_ICON_SIZE;
+//!
+//! UI utility functions.
+//!
 use crate::app_state::AppState;
 use crate::keyboard::keybind_action::KeybindAction;
-use crate::ui_const::UI_TOOLBAR_BUTTON_HEIGHT_SMALL;
+use crate::ui_const::{UI_TOOLBAR_BUTTON_HEIGHT_SMALL, UI_TOOLBAR_ICON_SIZE};
 use crate::ui_style::AppStyle;
 use fa_iced as fa;
 use iced::widget::tooltip::Position;
-use iced::widget::{TextInput, button, checkbox, container, horizontal_space, row, text, tooltip};
+use iced::widget::{button, container, tooltip};
 use iced::{Element, Length};
 use rust_i18n::t;
 

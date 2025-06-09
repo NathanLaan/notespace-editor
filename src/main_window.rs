@@ -11,8 +11,6 @@ use super::app_state::AppState;
 use crate::controls::statusbar::AppStatusbar;
 use crate::controls::toolbar::AppToolbar;
 use crate::keyboard::keybind_action::KeybindAction;
-use iced::event;
-use iced::keyboard::Key::Character;
 use iced::widget::{center, horizontal_space, mouse_area, opaque, stack};
 use iced::widget::{column, container, row, text_editor};
 use iced::{Element, Length, Task, Theme};
@@ -174,7 +172,7 @@ impl AppMain {
                 Task::none()
             }
             AppMessage::TabPressed => Task::none(),
-            AppMessage::FocusChanged(id) => Task::none(),
+            AppMessage::FocusChanged(_id) => Task::none(),
             AppMessage::OpenAppConfigurationModal => {
                 self.show_app_configuration_modal = true;
                 Task::none()

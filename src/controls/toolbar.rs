@@ -4,20 +4,19 @@
 //! Toolbar for main app window.
 //!
 
-use crate::app_const::{
-    UI_CONTROL_PADDING, UI_CONTROL_SPACING, UI_TOOLBAR_BUTTON_SIZE, UI_TOOLBAR_ICON_SIZE,
-    UI_TOOLTIP_PADDING,
-};
 use crate::app_message::AppMessage;
 use crate::app_state::AppState;
 use crate::keyboard::keybind_action::KeybindAction;
+use crate::ui_const::{
+    UI_CONTROL_PADDING, UI_CONTROL_SPACING, UI_TOOLBAR_BUTTON_SIZE, UI_TOOLBAR_ICON_SIZE,
+};
 use crate::ui_style::AppStyle;
 use crate::ui_util::create_toolbar_button_small;
 use fa_iced as fa;
+use iced::widget::PickList;
 use iced::widget::tooltip::Position;
-use iced::widget::{PickList, text};
 use iced::{
-    Element, Font, Length, Theme, border,
+    Element, Length, Theme,
     widget::{Container, button, container, horizontal_space, row, tooltip},
 };
 use rust_i18n::t;
@@ -157,7 +156,6 @@ fn create_button<'a, Message: Clone + 'a>(
     i18n_key: &'a str,
     on_press: Option<Message>,
 ) -> Element<'a, Message> {
-    let is_disabled = on_press.is_none();
     let btn = button(
         container(fa::iced_text_icon_solid(icon_key, UI_TOOLBAR_ICON_SIZE))
             .center_x(Length::Fill)
