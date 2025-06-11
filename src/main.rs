@@ -16,8 +16,10 @@ mod ui_const;
 mod ui_style;
 mod ui_util;
 
+use crate::app_configuration::AppConfiguration;
 use fa_iced::load_font_fontawesome_ttf;
 use main_window::AppMain;
+
 extern crate rust_i18n;
 
 //
@@ -34,12 +36,18 @@ fn main() -> iced::Result {
     //
     // TODO: Load app configuration here to get window size and location
     //
+    let app_configuration = AppConfiguration::load();
 
     //
     // Initialize and run the app.
     //
     let mut window_settings = iced::window::Settings::default();
-    window_settings.size = iced::Size::new(1200.0, 1024.0);
+    //window_settings.size = iced::Size::new(1200.0, 1024.0);
+    window_settings.size = iced::Size::new(app_configuration.window_w, app_configuration.window_h);
+    window_settings.position = iced::window::Position::Specific(iced::Point {
+        x: app_configuration.window_w,
+        y: app_configuration.window_h,
+    });
     iced::application(AppMain::title, AppMain::update, AppMain::view)
         .subscription(AppMain::subscription)
         .window(window_settings)

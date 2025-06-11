@@ -8,6 +8,8 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
 
+const SETTINGS_FILE: &str = "notespace_settings.toml";
+
 ///
 /// User configuration settings.
 ///
@@ -40,7 +42,7 @@ impl AppConfiguration {
     pub fn path() -> PathBuf {
         dirs::config_dir()
             .unwrap_or_else(|| PathBuf::from("."))
-            .join("settings.toml")
+            .join(SETTINGS_FILE)
     }
 
     pub fn load() -> Self {
@@ -55,6 +57,7 @@ impl AppConfiguration {
 
     pub fn save(&self) {
         let path = Self::path();
+        println!("saving config to {:?}", &path);
         if let Some(parent) = path.parent() {
             let _ = fs::create_dir_all(parent);
         }

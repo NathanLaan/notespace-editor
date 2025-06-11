@@ -13,6 +13,7 @@ use crate::controls::toolbar::AppToolbar;
 use crate::keyboard::keybind_action::KeybindAction;
 use iced::widget::{center, horizontal_space, mouse_area, opaque, stack};
 use iced::widget::{column, container, row, text_editor};
+use iced::window::Event;
 use iced::{Element, Length, Task, Theme};
 use iced::{Font, Subscription};
 use rust_i18n::t;
@@ -34,11 +35,12 @@ pub struct AppMain {
 impl Default for AppMain {
     fn default() -> Self {
         let app_state = AppState::default();
+        //let mut app_configuration = AppConfiguration::load();
         Self {
             app_state,
             toolbar: AppToolbar::new(),
             statusbar: AppStatusbar::new(),
-            app_configuration: AppConfiguration::default(),
+            app_configuration: AppConfiguration::load(),
             show_app_configuration_modal: false,
         }
     }
@@ -150,7 +152,30 @@ impl AppMain {
                 Task::none()
             }
             AppMessage::EventOccurred(iced::Event::Mouse(_)) => Task::none(),
-            AppMessage::EventOccurred(iced::Event::Window(_)) => Task::none(),
+            AppMessage::EventOccurred(iced::Event::Window(event)) => {
+                //
+                //
+                //
+
+                match (event) {
+                    iced::window::Event::Moved(point) => {}
+                    Event::Opened { .. } => {}
+                    Event::Closed => {}
+                    Event::Resized(size) => {
+                        self.app_configuration.window_w = size.width;
+                        self.app_configuration.window_h = size.height;
+                        self.app_configuration.save();
+                    }
+                    Event::RedrawRequested(_) => {}
+                    Event::CloseRequested => {}
+                    Event::Focused => {}
+                    Event::Unfocused => {}
+                    Event::FileHovered(_) => {}
+                    Event::FileDropped(_) => {}
+                    Event::FilesHoveredLeft => {}
+                }
+                Task::none()
+            }
             AppMessage::EventOccurred(iced::Event::Touch(_)) => Task::none(),
             AppMessage::EventOccurred(iced::Event::Keyboard(
                 iced::keyboard::Event::ModifiersChanged(_),
