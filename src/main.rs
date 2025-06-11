@@ -34,7 +34,7 @@ fn main() -> iced::Result {
     load_font_fontawesome_ttf();
 
     //
-    // TODO: Load app configuration here to get window size and location
+    // TODO: Load app configuration.
     //
     let app_configuration = AppConfiguration::load();
 
@@ -43,11 +43,8 @@ fn main() -> iced::Result {
     //
     let mut window_settings = iced::window::Settings::default();
     //window_settings.size = iced::Size::new(1200.0, 1024.0);
-    window_settings.size = iced::Size::new(app_configuration.window_w, app_configuration.window_h);
-    window_settings.position = iced::window::Position::Specific(iced::Point {
-        x: app_configuration.window_w,
-        y: app_configuration.window_h,
-    });
+    window_settings.size = app_configuration.get_window_size();
+    window_settings.position = app_configuration.get_window_position();
     iced::application(AppMain::title, AppMain::update, AppMain::view)
         .subscription(AppMain::subscription)
         .window(window_settings)

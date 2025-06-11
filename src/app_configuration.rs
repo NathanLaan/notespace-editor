@@ -39,12 +39,40 @@ impl Default for AppConfiguration {
 }
 
 impl AppConfiguration {
+
+    ///
+    /// Shortcut function for use when the application loads.
+    /// 
+    pub(crate) fn get_window_size(&self) -> iced::Size {
+        iced::Size::new(self.window_w, self.window_h)
+    }
+
+    ///
+    /// Shortcut function for use when the application loads.
+    ///
+    pub(crate) fn get_window_position(&self) -> iced::window::Position {
+        iced::window::Position::Specific(iced::Point {
+            x: self.window_w,
+            y: self.window_h,
+        })
+    }
+    
+    ///
+    /// Returns the configuration file path:
+    /// 
+    /// `dirs::config_dir() + SETTINGS_FILE`
+    /// 
     pub fn path() -> PathBuf {
         dirs::config_dir()
             .unwrap_or_else(|| PathBuf::from("."))
             .join(SETTINGS_FILE)
     }
 
+    ///
+    /// Attempts to load `AppConfiguration` from the configuration file.
+    /// 
+    /// Returns `AppConfiguration::default()` if no configuration file is found.
+    /// 
     pub fn load() -> Self {
         let path = Self::path();
         if let Ok(content) = fs::read_to_string(&path) {
