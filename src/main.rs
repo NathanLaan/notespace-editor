@@ -36,20 +36,20 @@ fn main() -> iced::Result {
     //
     // TODO: Load app configuration.
     //
+    // TODO: Load the `scale_factor` and multiply the size before setting.
+    //
     let app_configuration = AppConfiguration::load();
+    let mut window_settings = iced::window::Settings::default();
+    window_settings.size = app_configuration.get_window_size();
+    window_settings.position = app_configuration.get_window_position();
 
     //
     // Initialize and run the app.
     //
-    let mut window_settings = iced::window::Settings::default();
-    //window_settings.size = iced::Size::new(1200.0, 1024.0);
-    window_settings.size = app_configuration.get_window_size();
-    window_settings.position = app_configuration.get_window_position();
     iced::application(AppMain::title, AppMain::update, AppMain::view)
         .subscription(AppMain::subscription)
         .window(window_settings)
         .scale_factor(AppMain::scale_factor)
         .theme(AppMain::theme)
         .run()
-    //AppMain::run(iced::Settings::default())
 }

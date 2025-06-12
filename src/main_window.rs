@@ -64,6 +64,15 @@ impl AppMain {
     //     (app, Task::none())
     // }
 
+    // pub(crate) fn get_window_settings(&mut self) -> iced::window::Settings {
+    //     self.app_configuration = AppConfiguration::load();
+    //     self.app_state.scale_factor = self.app_configuration.scale_factor;
+    //     let mut window_settings = iced::window::Settings::default();
+    //     //window_settings.size = iced::Size::new(1200.0, 1024.0);
+    //     window_settings.size = self.app_configuration.get_window_size();
+    //     window_settings.position = self.app_configuration.get_window_position();
+    // }
+
     ///
     /// Iced function to handle messages.
     ///
