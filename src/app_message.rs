@@ -24,7 +24,7 @@ pub enum AppMessage {
     //KeyPressed(iced::keyboard::Key, iced::keyboard::Modifiers),
     //KeyPressedEvent(iced::keyboard::Key),
     EventOccurred(iced::Event),
-    WindowResized(f32, f32),
+    //WindowResized(f32, f32),
     SaveAppConfiguration,
     TabPressed,
     FocusChanged(Option<iced::advanced::widget::Id>),

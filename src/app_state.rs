@@ -22,7 +22,7 @@ pub struct AppState {
     pub(crate) file_content: Content,
     pub(crate) error: Option<AppIOError>,
     pub(crate) font_monospaced: Option<Font>,
-    pub(crate) app_configuration_changed: bool,
+    //pub(crate) app_configuration_changed: bool,
     pub(crate) keybind_manager: KeybindManager,
 }
 
@@ -37,7 +37,7 @@ impl Default for AppState {
             file_content: Content::default(),
             error: None,
             font_monospaced: None,
-            app_configuration_changed: false,
+            //app_configuration_changed: false,
             keybind_manager: KeybindManager::default(),
         }
     }

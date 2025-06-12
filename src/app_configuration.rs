@@ -19,7 +19,7 @@ pub(crate) struct AppConfiguration {
     pub window_y: f32,
     pub window_w: f32,
     pub window_h: f32,
-    pub scale_factor: f32,
+    pub scale_factor: f64,
     pub window_theme_name: String,
     pub syntax_theme_name: String,
 }
@@ -39,10 +39,9 @@ impl Default for AppConfiguration {
 }
 
 impl AppConfiguration {
-
     ///
     /// Shortcut function for use when the application loads.
-    /// 
+    ///
     pub(crate) fn get_window_size(&self) -> iced::Size {
         iced::Size::new(self.window_w, self.window_h)
     }
@@ -56,12 +55,12 @@ impl AppConfiguration {
             y: self.window_h,
         })
     }
-    
+
     ///
     /// Returns the configuration file path:
-    /// 
+    ///
     /// `dirs::config_dir() + SETTINGS_FILE`
-    /// 
+    ///
     pub fn path() -> PathBuf {
         dirs::config_dir()
             .unwrap_or_else(|| PathBuf::from("."))
@@ -70,9 +69,9 @@ impl AppConfiguration {
 
     ///
     /// Attempts to load `AppConfiguration` from the configuration file.
-    /// 
+    ///
     /// Returns `AppConfiguration::default()` if no configuration file is found.
-    /// 
+    ///
     pub fn load() -> Self {
         let path = Self::path();
         if let Ok(content) = fs::read_to_string(&path) {

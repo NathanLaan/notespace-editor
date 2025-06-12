@@ -56,13 +56,13 @@ impl AppMain {
     // type Flags = ();
     // //type State = AppState;
 
-    ///
-    /// Constructor.
-    ///
-    pub fn new() -> (Self, Task<AppMessage>) {
-        let app = AppMain::default();
-        (app, Task::none())
-    }
+    // ///
+    // /// Constructor.
+    // ///
+    // pub fn new() -> (Self, Task<AppMessage>) {
+    //     let app = AppMain::default();
+    //     (app, Task::none())
+    // }
 
     ///
     /// Iced function to handle messages.
@@ -115,6 +115,8 @@ impl AppMain {
             }
             AppMessage::UpdateScale(value) => {
                 self.app_state.scale_factor = value;
+                self.app_configuration.scale_factor = value;
+                self.app_configuration.save();
                 Task::none()
             }
             AppMessage::EventOccurred(iced::Event::Keyboard(
@@ -153,12 +155,18 @@ impl AppMain {
             }
             AppMessage::EventOccurred(iced::Event::Mouse(_)) => Task::none(),
             AppMessage::EventOccurred(iced::Event::Window(event)) => {
-                //
-                //
-                //
-
-                match (event) {
-                    iced::window::Event::Moved(point) => {}
+                println!("EVENT {:?}", event);
+                match event {
+                    Event::Moved(point) => {
+                        //
+                        // This does not currently work. The iced docs state "Note: Not available in Wayland."
+                        //
+                        // https://docs.rs/iced_core/0.13.2/iced_core/window/enum.Event.html
+                        //
+                        self.app_configuration.window_x = point.x;
+                        self.app_configuration.window_y = point.y;
+                        self.app_configuration.save();
+                    }
                     Event::Opened { .. } => {}
                     Event::Closed => {}
                     Event::Resized(size) => {
@@ -183,17 +191,18 @@ impl AppMain {
             AppMessage::EventOccurred(iced::Event::Keyboard(
                 iced::keyboard::Event::KeyReleased { .. },
             )) => Task::none(),
-            AppMessage::WindowResized(w, h) => {
-                self.app_configuration.window_w = w;
-                self.app_configuration.window_h = h;
-                self.app_configuration.save();
-                Task::none()
-            }
+            // AppMessage::WindowResized(w, h) => {
+            //     self.app_configuration.window_w = w;
+            //     self.app_configuration.window_h = h;
+            //     self.app_configuration.save();
+            //     Task::none()
+            // }
             AppMessage::SaveAppConfiguration => {
-                if self.app_state.app_configuration_changed {
-                    self.app_configuration.save();
-                    self.app_state.app_configuration_changed = false;
-                }
+                // if self.app_state.app_configuration_changed {
+                //     self.app_configuration.save();
+                //     self.app_state.app_configuration_changed = false;
+                // }
+                self.app_configuration.save();
                 Task::none()
             }
             AppMessage::TabPressed => Task::none(),
@@ -243,16 +252,16 @@ impl AppMain {
         t!("app_name").to_string()
     }
 
-    pub(crate) fn window(&self) -> iced::window::Settings {
-        println!("AppMain::window()");
-        iced::window::Settings {
-            size: iced::Size::new(
-                self.app_configuration.window_w,
-                self.app_configuration.window_h,
-            ),
-            ..iced::window::Settings::default()
-        }
-    }
+    // pub(crate) fn window(&self) -> iced::window::Settings {
+    //     println!("AppMain::window()");
+    //     iced::window::Settings {
+    //         size: iced::Size::new(
+    //             self.app_configuration.window_w,
+    //             self.app_configuration.window_h,
+    //         ),
+    //         ..iced::window::Settings::default()
+    //     }
+    // }
 
     ///
     /// Iced function to render the view.
