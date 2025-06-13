@@ -34,8 +34,12 @@ pub struct AppMain {
 ///
 impl Default for AppMain {
     fn default() -> Self {
-        let app_state = AppState::default();
-        //let mut app_configuration = AppConfiguration::load();
+        let mut app_state = AppState::default();
+        //
+        // TODO: This is the second time app_configuration load() is called.
+        //
+        let mut app_configuration = AppConfiguration::load();
+        app_state.scale_factor = app_configuration.scale_factor;
         Self {
             app_state,
             toolbar: AppToolbar::new(),
@@ -179,8 +183,10 @@ impl AppMain {
                     Event::Opened { .. } => {}
                     Event::Closed => {}
                     Event::Resized(size) => {
-                        self.app_configuration.window_w = size.width * self.app_state.scale_factor as f32;
-                        self.app_configuration.window_h = size.height * self.app_state.scale_factor as f32;
+                        self.app_configuration.window_w =
+                            size.width * self.app_state.scale_factor as f32;
+                        self.app_configuration.window_h =
+                            size.height * self.app_state.scale_factor as f32;
                         self.app_configuration.save();
                     }
                     Event::RedrawRequested(_) => {}
