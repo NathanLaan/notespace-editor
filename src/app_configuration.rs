@@ -43,6 +43,9 @@ impl AppConfiguration {
     /// Shortcut function for use when the application loads.
     ///
     pub(crate) fn get_window_size(&self) -> iced::Size {
+        // let w = self.window_w * self.scale_factor as f32;
+        // let h = self.window_h * self.scale_factor as f32;
+        // iced::Size::new(w, h)
         iced::Size::new(self.window_w, self.window_h)
     }
 

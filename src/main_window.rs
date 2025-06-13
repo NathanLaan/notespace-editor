@@ -179,8 +179,8 @@ impl AppMain {
                     Event::Opened { .. } => {}
                     Event::Closed => {}
                     Event::Resized(size) => {
-                        self.app_configuration.window_w = size.width;
-                        self.app_configuration.window_h = size.height;
+                        self.app_configuration.window_w = size.width * self.app_state.scale_factor as f32;
+                        self.app_configuration.window_h = size.height * self.app_state.scale_factor as f32;
                         self.app_configuration.save();
                     }
                     Event::RedrawRequested(_) => {}
